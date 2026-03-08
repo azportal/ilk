@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="https://azportal.github.io/ilk/ — Azərbaycanda ən böyük onlayn portal." />
+  <meta name="description" content="https://azportal.github.io/ilk/ — Azərbaycanda ən böyük onlayn portal. 80 bölmə, pulsuz xidmətlər, 5 dil." />
   
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-00KMGJ4TSM"></script>
   <script>
@@ -12,90 +12,115 @@
     gtag('js', new Date());
     gtag('config', 'G-00KMGJ4TSM');
   </script>
+
   <meta name="google-site-verification" content="6zwIJK4HBkk3x12b1s263vSQWxxrIAytcKQ-QrjFNjY" />
   <meta name="google-site-verification" content="7KYCp6OVjOrZB_TTBfOI8X-d6JSOlyjRtp3NDhplsCY" />
   
   <style>
     :root{
       --bg:#fff5f5; --panel:#ffffff; --accent:#d32f2f; --accent-alt:#1976d2;
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      --touch:#ffe0e0; --wa-color:#25D366;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     }
-    body{margin:0; background:var(--bg); padding-bottom: 60px;}
-    header { position:fixed; top:0; left:0; right:0; height:56px; display:flex; align-items:center; padding:0 12px; background:linear-gradient(135deg, #d32f2f 0%, #1976d2 100%); z-index:1000; color:#fff; font-weight:900; }
-    .wrap { max-width:720px; margin:0 auto; padding:72px 12px 20px; }
-    .searchbar input { width:100%; padding:12px; border-radius:8px; border:2px solid var(--accent); box-sizing:border-box; margin-bottom:15px; }
-    .list-section { background:#fff; margin-bottom:15px; border-radius:8px; border-top:3px solid var(--accent); padding:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
-    .list-section h3 { margin:0 0 10px 0; font-size:14px; color:var(--accent); text-transform:uppercase; }
+    html,body{margin:0; background:var(--bg); color:#0b1822;}
+    header {
+      position:fixed; top:0; left:0; right:0; height:56px; display:flex; align-items:center;
+      padding:8px 12px; background:linear-gradient(135deg, #d32f2f 0%, #1976d2 100%);
+      border-bottom:3px solid var(--accent); z-index:1000; box-shadow:0 4px 12px rgba(211,47,47,0.3);
+    }
+    .wrap { max-width:720px; margin:0 auto; padding:72px 12px 120px; }
+    .brand { font-weight:900; color:#ffffff; font-size:16px; }
+    .searchbar { margin:6px 0 12px; display:flex; gap:6px; }
+    .searchbar input{ flex:1; padding:10px 12px; border-radius:8px; border:2px solid var(--accent); font-size:14px; }
+    .list-section { margin:12px 0; border-top:3px solid var(--accent); padding:12px; background:rgba(211,47,47,0.03); border-radius:8px; }
+    .list-section h3 { margin:0 0 10px 0; font-size:13px; font-weight:900; color:var(--accent); text-transform:uppercase; }
     ul.menu { list-style:none; padding:0; margin:0; }
-    li.menu-item { border-bottom:1px solid rgba(211,47,47,0.1); }
-    a.menu-link { display:flex; padding:12px 10px; text-decoration:none; color:#333; font-weight:500; align-items:center; }
-    .num { width:35px; color:var(--accent); font-weight:900; }
-    #contentArea { display:none; background:#fff; padding:20px; border-radius:8px; border:3px solid var(--accent); }
-    .btn { padding:15px; border-radius:8px; background:linear-gradient(135deg, #d32f2f, #1976d2); color:#fff; text-align:center; text-decoration:none; display:block; font-weight:bold; margin-top:20px; }
-    .back-btn { display:inline-block; margin-bottom:15px; color:var(--accent); text-decoration:none; font-weight:bold; }
+    li.menu-item { border-bottom:1px solid rgba(211,47,47,0.1); background:var(--panel); margin-bottom:6px; border-radius:6px; }
+    a.menu-link { display:flex; align-items:center; gap:10px; padding:12px 10px; color:inherit; text-decoration:none; font-size:14px; font-weight:500; }
+    .num { width:32px; color:var(--accent); font-weight:900; }
+    #contentArea { display:none; padding:15px; background:var(--panel); border:3px solid var(--accent); border-radius:8px; }
+    .btn { padding:12px; border-radius:6px; background:var(--accent); color:#fff; text-align:center; text-decoration:none; display:inline-block; font-weight:bold; }
+    .dl-btn { width:100%; display:block; background:linear-gradient(135deg, #d32f2f, #1976d2); margin-top:15px; }
+    .back-btn { padding:8px 12px; border-radius:6px; background:#eee; color:#333; text-decoration:none; display:inline-block; margin-bottom:15px; font-weight:bold; }
+    footer { position:fixed; bottom:0; left:0; right:0; background:linear-gradient(135deg, #d32f2f 0%, #1976d2 100%); padding:12px; text-align:center; color:#fff; font-size:11px; }
   </style>
 </head>
 <body>
+  <header><div class="brand">https://azportal.github.io/ilk/</div></header>
 
-<header>https://azportal.github.io/ilk/</header>
+  <main class="wrap">
+    <div id="mainView">
+      <div class="searchbar"><input id="searchInput" type="search" placeholder="Axtar..." /></div>
+      <div id="menuContainer"></div>
+    </div>
+    <div id="contentArea"></div>
+  </main>
 
-<main class="wrap">
-  <div id="mainView">
-    <div class="searchbar"><input id="searchInput" type="search" placeholder="Axtar..." /></div>
-    <div id="menuContainer"></div>
-  </div>
-  <div id="contentArea"></div>
-</main>
+  <footer>Müəllif: Azmi | © 2023-2026</footer>
 
 <script>
-// Köhnə adları bura daxil etdim ki, "Bölmə X" yazısı görünməsin
-const defaultNames = {
-  1:"📥 Whatsapp Plus", 2:"📥 Instagram Plus", 3:"📥 Youtube Plus", 4:"📥 TikTok Plus", 5:"🔐 ArgoVPN Pro",
-  6:"🖼 Şəkil Bərpa", 7:"🎵 Mahnı Axtar", 8:"🔎 Şəkil Axtar", 9:"🔗 Lazımlı Linklər", 10:"ℹ️ İnformasiya"
+const translations = {
+  az: {
+    m1:"📥 Whatsapp Plus Yüklə", m2:"📥 Instagram Plus Yüklə", m3:"📥 Youtube Plus Yüklə", m4:"📥 TikTok Plus Yüklə", m5:"🔐 ArgoVPN Pro Yüklə",
+    m6:"🖼 Silinmiş şəkillərin bərpası", m7:"🎵 Mahnı Axtar", m8:"🔎 Şəkil Axtar", m9:"🔗 Lazımlı Linklər", m10:"ℹ️ İnformasiya"
+  }
 };
 
 const categories = {
   "📥 Yükləmələr": [1,2,3,4,5],
   "🎨 Media & Bərpa": [6,7,8],
-  "ℹ️ Məlumat": [9,10]
+  "🔍 Axtarış & Məlumat": [9,10]
 };
 
-function renderMenu(filter = '') {
+function renderMenu(filterText = '') {
   const container = document.getElementById('menuContainer');
   container.innerHTML = '';
   const db = JSON.parse(localStorage.getItem('portal_db') || '{}');
 
-  Object.keys(categories).forEach(cat => {
-    let html = `<div class="list-section"><h3>${cat}</h3><ul class="menu">`;
-    let hasMatch = false;
-
-    categories[cat].forEach(id => {
-      const name = (db[id] && db[id].t) ? db[id].t : (defaultNames[id] || "Bölmə " + id);
-      if(name.toLowerCase().includes(filter.toLowerCase())) {
-        html += `<li class="menu-item"><a href="#" class="menu-link" onclick="openSection(${id}); return false;"><span class="num">${id}</span>${name}</a></li>`;
-        hasMatch = true;
-      }
+  Object.keys(categories).forEach(catName => {
+    const ids = categories[catName];
+    const matched = ids.filter(i => {
+      const name = (db[i] && db[i].t) ? db[i].t : (translations.az['m'+i] || "Bölmə "+i);
+      return name.toLowerCase().includes(filterText.toLowerCase());
     });
 
-    html += '</ul></div>';
-    if(hasMatch) container.innerHTML += html;
+    if(matched.length === 0) return;
+
+    const sec = document.createElement('section'); sec.className = 'list-section';
+    sec.innerHTML = `<h3>${catName}</h3><ul class="menu"></ul>`;
+    const ul = sec.querySelector('ul');
+
+    matched.forEach(i => {
+      const name = (db[i] && db[i].t) ? db[i].t : (translations.az['m'+i] || "Bölmə "+i);
+      const li = document.createElement('li'); li.className = 'menu-item';
+      li.innerHTML = `<a href="#" class="menu-link" onclick="openSection(${i});return false;"><span class="num">${i}</span><span>${name}</span></a>`;
+      ul.appendChild(li);
+    });
+    container.appendChild(sec);
   });
 }
 
 function openSection(id) {
   const db = JSON.parse(localStorage.getItem('portal_db') || '{}');
   const custom = db[id] || {};
-  const name = custom.t || defaultNames[id] || "Bölmə " + id;
-  
+  const name = custom.t || translations.az['m'+id] || "Bölmə "+id;
+
   document.getElementById('mainView').style.display = 'none';
   const area = document.getElementById('contentArea');
   area.style.display = 'block';
+
   area.innerHTML = `
-    <a href="#" class="back-btn" onclick="location.reload(); return false;">⬅️ Geri</a>
+    <a href="#" class="back-btn" onclick="closeSection();return false;">⬅️ Geri qayıt</a>
     <h2 style="color:var(--accent)">${id}. ${name}</h2>
-    <div style="white-space:pre-line; line-height:1.6;">${custom.d || "Admin panelindən bu bölməyə məqalə əlavə edilməyib."}</div>
-    <a href="${custom.l || '#'}" target="_blank" class="btn">GİRİŞ ET / YÜKLƏ</a>
+    <div style="white-space:pre-line; margin-bottom:20px; line-height:1.6;">${custom.d || "Bu bölmə haqqında məlumat admin tərəfindən əlavə edilməyib."}</div>
+    <a href="${custom.l || '#'}" target="_blank" class="btn dl-btn">📥 İNDİ YÜKLƏ / GİRİŞ ET</a>
   `;
+  window.scrollTo(0,0);
+}
+
+function closeSection() {
+  document.getElementById('mainView').style.display = 'block';
+  document.getElementById('contentArea').style.display = 'none';
 }
 
 document.getElementById('searchInput').addEventListener('input', e => renderMenu(e.target.value));
