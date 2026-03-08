@@ -1,0 +1,773 @@
+<!doctype html>
+<html lang="az">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>tatli-style WAP Portal — SPA (Çoxdilli)</title>
+  <meta name="description" content="Yüngül WAP üslubunda, mobilə uyğun SPA portal — 80 bölmə, çoxdilli" />
+  <style>
+    /* Retro WAP-like minimal style, mobile-first */
+    :root{
+      --bg:#fffefc;
+      --panel:#ffffff;
+      --muted:#666;
+      --accent:#0b63a8;
+      --border:#e6e6e6;
+      --touch:#f3f7fb;
+      --radius:8px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans";
+      color:#0b1822;
+    }
+    html,body{height:100%;margin:0;background:var(--bg);-webkit-text-size-adjust:100%;}
+    /* header fixed */
+    header {
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+      height:56px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      padding:8px 12px;
+      background:linear-gradient(#ffffff,#fbfdff);
+      border-bottom:1px solid var(--border);
+      z-index:1000;
+    }
+    .wrap { max-width:720px;margin:0 auto;padding:72px 12px 110px;} /* space for header/footer */
+    .brand { font-weight:700;color:var(--accent); font-size:16px; }
+    .datetime { font-size:13px; color:var(--muted); text-align:right; min-width:120px; }
+    /* Language switcher */
+    .lang-switch { display:flex; gap:6px; align-items:center; margin-left:8px; }
+    .lang-btn { padding:4px 8px; border-radius:6px; border:1px solid var(--border); background:#fff; font-size:12px; cursor:pointer; color:var(--muted); }
+    .lang-btn.active { background:var(--accent); color:#fff; font-weight:600; border-color:rgba(11,99,168,.9); }
+    .searchbar { margin:6px 0 12px; display:flex; gap:8px; }
+    .searchbar input{
+      flex:1;padding:8px 10px;border-radius:6px;border:1px solid var(--border);font-size:14px;background:var(--panel);
+    }
+    .btn { display:inline-block;padding:8px 10px;border-radius:6px;border:1px solid var(--border);background:#fff;font-size:14px;color:var(--accent);cursor:pointer;text-decoration:none; text-align:center;}
+    .list-section { margin:10px 0; border-top:1px solid var(--border); padding-top:10px; }
+    .list-section h3 { margin:0 0 8px 0; font-size:14px; color:#0b2b44; }
+    ul.menu { list-style:none;padding:0;margin:0; }
+    li.menu-item { border-bottom:1px solid var(--border); background:var(--panel); }
+    a.menu-link { display:flex; align-items:center; gap:10px; padding:10px 8px; color:inherit; text-decoration:none; font-size:15px; }
+    a.menu-link:active { background:var(--touch); }
+    .num { width:36px; color:var(--muted); flex-shrink:0; font-weight:600; }
+    .title { flex:1; }
+    .meta { font-size:12px; color:var(--muted); white-space:nowrap; }
+    /* content area */
+    #contentArea { display:none; padding:8px; background:var(--panel); border:1px solid var(--border); border-radius:6px; }
+    .back-btn { display:inline-block;margin:8px 0;padding:8px 10px;border-radius:6px;border:1px solid var(--border);background:#fff;font-size:14px;color:var(--accent);text-decoration:none;cursor:pointer;}
+    .card { padding:12px;border-radius:6px;border:1px solid #efefef;background:#fff; margin-bottom:10px; }
+    label{ display:block; font-size:13px; margin:8px 0 4px; color:#123 }
+    input[type="text"], input[type="number"], input[type="email"], select {
+      width:100%; padding:8px 10px; border-radius:6px; border:1px solid var(--border); font-size:14px; background:#fff; box-sizing:border-box;
+    }
+    .small{ font-size:13px; color:var(--muted); margin-top:6px; }
+    footer {
+      position:fixed;
+      bottom:0;
+      left:0;
+      right:0;
+      background:linear-gradient(#fff,#fbfdff);
+      border-top:1px solid var(--border);
+      padding:8px 12px;
+      font-size:13px;
+      color:var(--muted);
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      z-index:1000;
+    }
+    /* overlay for messages */
+    .overlayMsg {
+      position:fixed; left:12px; right:12px; top:70px; z-index:1200; display:none;
+      background:#fff; border:1px solid #ddd; box-shadow:0 6px 18px rgba(0,0,0,.08); padding:10px; border-radius:8px;
+    }
+    @media (max-width:420px){
+      .num{width:34px}
+      .brand{font-size:15px}
+      header{height:56px;padding:8px}
+      .wrap{padding:78px 10px 130px}
+      .lang-btn{padding:4px 6px;font-size:11px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="brand" data-i18n="brand">tatli.biz — Portal</div>
+      <!-- language switcher -->
+      <nav class="lang-switch" role="navigation" aria-label="Language selector">
+        <button class="lang-btn" data-lang="az">AZ</button>
+        <button class="lang-btn" data-lang="tr">TR</button>
+        <button class="lang-btn" data-lang="ru">RU</button>
+        <button class="lang-btn" data-lang="ua">UA</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </nav>
+    </div>
+    <div class="datetime" id="liveDate">--.--.---- --:--:--</div>
+  </header>
+
+  <main class="wrap" id="app">
+    <div class="searchbar" aria-hidden="false">
+      <input id="searchInput" placeholder="" type="search" data-i18n-placeholder="searchPlaceholder" />
+      <button id="clearSearch" class="btn" data-i18n="clearBtn">Təmizlə</button>
+    </div>
+
+    <!-- Menu container (rendered from JS) -->
+    <div id="menuContainer"></div>
+
+    <!-- Content area (single area displayed per section) -->
+    <div id="contentArea" role="region" aria-live="polite"></div>
+
+    <!-- Overlay message element -->
+    <div id="overlayMsg" class="overlayMsg"></div>
+  </main>
+
+  <footer>
+    <div data-i18n="footerAuthor">Müəllif: <strong>Azmi</strong></div>
+    <div data-i18n="footerNote">Yardımçı tərəfindən yaradılmışdır.</div>
+    <div data-i18n="footerYears">2023 - 2026</div>
+  </footer>
+
+<script>
+/* ---------- Multi-language translations (az/tr/ru/ua/en) ---------- */
+const translations = {
+  az: {
+    brand: "tatli.biz — Portal",
+    searchPlaceholder: "Axtar: nömrə, ad və ya emoji",
+    clearBtn: "Təmizlə",
+    hint: "Siyahı alt-alta — mobil üçün optimallaşdırılıb",
+    footerAuthor: "Müəllif: <strong>Azmi</strong>",
+    footerNote: "Yardımçı tərəfindən yaradılmışdır.",
+    footerYears: "2023 - 2026",
+    // m1..m80
+    m1: "📥 Whatsapp Plus Yüklə", m2: "📥 Instagram Plus Yüklə", m3: "📥 Youtube Plus Yüklə", m4: "📥 TikTok Plus Yüklə", m5: "🔐 ArgoVPN Pro Yüklə",
+    m6: "🖼 Silinmiş şəkillərin geri qaytarılması", m7: "🎵 Mahnı Axtar", m8: "🔎 Şəkil Axtar", m9: "🔗 Lazımlı Linklər", m10: "ℹ️ İnformasiya - Məlumat Axtar",
+    m11: "📚 Wikipedia-da Axtar", m12: "🔍 Ümumi Axtarış", m13: "📱 Tanınmış Simlar", m14: "💊 Dərman Axtar(Qiyməti)", m15: "🎬 Kinolar",
+    m16: "📺 Seriallar", m17: "🕌 Quranı Kərim - Səsli(Azərbaycanca)", m18: "🕌 Quranı Kərim - Səsli(Türkcə)", m19: "🕌 Quranı Kərim - Səsli(Rusca)", m20: "🕌 Quranı Kərim - Səsli(Ərəbcə)",
+    m21: "📰 Ən Son Xəbərlər", m22: "🗞 Xəbər Lenti", m23: "🌟 Show Biznes Xəbərləri", m24: "🌍 Qarışıq Xəbərlər", m25: "🌦 Gündəlik Hava haqqında",
+    m26: "♈ Gündəlik Bürclər", m27: "🦠 Koronavirus canlı izlə(COVID-19)", m28: "⚽ İdman Xəbərləri", m29: "🕋 Namaz vaxtları", m30: "💱 Valyuta Məzənnəsi",
+    m31: "📊 Gündəm Məlumatlar", m32: "👩 Qadın Dünyası", m33: "👨 Kişi Dünyası", m34: "❤️ Sevgi Aləmi", m35: "🖼 Status Şəkilləri",
+    m36: "🧠 Psixologiya", m37: "🧩 Psixoloji Testlər", m38: "💡 İşığa borcunu öyrən", m39: "🔥 Qaza borcunu öyrən", m40: "💧 Suya borcunu öyrən",
+    m41: "🌐 Online Tərcümə", m42: "♓ Bürc-il Yoxla", m43: "✨ Bürclərin Sirri", m44: "🗺 Online Xəritə", m45: "🎂 Doğum gününü hesabla",
+    m46: "📅 Hansı gün doğuldun?", m47: "⚖️ İdeal çəkini hesabla", m48: "📝 İmtahan nəticələrini hesabla", m49: "✍️ Mətni Fərqli Yaz", m50: "❌⭕ X - O Oyunu",
+    m51: "♟ Dama Oyunu", m52: "🔮 Online Sehr", m53: "📐 II Dərəcə Tənlik Hesabla", m54: "🧮 Online Hesablayıcı", m55: "💰 Boşdayanma zamanı əmək haqqının hesablanması",
+    m56: "📡 Wap+Web Skaner", m57: "🌍 Domen Yoxla", m58: "💳 Webmoney Hesabla(WMR)", m59: "🌐 Dünya Domenləri", m60: "📍 İP Axtar",
+    m61: "💻 Kodlaşdırma", m62: "⚙️ Qrab Hazırla", m63: "🔣 Simvol Kodları", m64: "🔤 Hərf Kodları", m65: "🎨 Rəng Kodları",
+    m66: "🙂 Smayl düzəlt", m67: "🔘 Button düzəlt", m68: "🤔 Maraqlı Məlumatlar", m69: "💄 Moda və Gözəllik", m70: "🏥 Sağlamlıq",
+    m71: "👨‍👩‍👧 Ailə və uşaq", m72: "🍲 Mətbəx", m73: "📖 Orta Məktəb Dərslikləri (Online Dərsliklər)", m74: "📘 Peşə Məktəbi Dərslikləri (Online Dərsliklər)",
+    m75: "📝 İnşalar toplusu", m76: "📜 Atalar Sözləri və Məsəllər", m77: "💬 Aforizmlər - Dahilərin sözləri", m78: "❓ Tapmacalar", m79: "😂 Lətifələr", m80: "🧚 Nağıllar"
+  },
+
+  tr: {
+    brand: "tatli.biz — Portal",
+    searchPlaceholder: "Ara: numara, isim veya emoji",
+    clearBtn: "Temizle",
+    hint: "Liste satır satır — mobil için optimize edildi",
+    footerAuthor: "Yazar: <strong>Azmi</strong>",
+    footerNote: "Yardımcı tarafından oluşturuldu.",
+    footerYears: "2023 - 2026",
+    m1: "📥 Whatsapp Plus İndir", m2: "📥 Instagram Plus İndir", m3: "📥 Youtube Plus İndir", m4: "📥 TikTok Plus İndir", m5: "🔐 ArgoVPN Pro İndir",
+    m6: "🖼 Silinmiş resimleri geri getir", m7: "🎵 Şarkı Bul", m8: "🔎 Resim Ara", m9: "🔗 Faydalı Linkler", m10: "ℹ️ Bilgi Ara",
+    m11: "📚 Wikipedia'da Ara", m12: "🔍 Genel Arama", m13: "📱 Tanınmış İsimler", m14: "💊 İlaç Ara (Fiyat)", m15: "🎬 Filmler",
+    m16: "📺 Diziler", m17: "🕌 Kuran - Sesli (Azeri)", m18: "🕌 Kuran - Sesli (Türkçe)", m19: "🕌 Kuran - Sesli (Rusça)", m20: "🕌 Kuran - Sesli (Arapça)",
+    m21: "📰 Son Haberler", m22: "🗞 Haber Akışı", m23: "🌟 Show Biznes Haberleri", m24: "🌍 Karışık Haberler", m25: "🌦 Günlük Hava",
+    m26: "♈ Günlük Burçlar", m27: "🦠 COVID-19 — canlı", m28: "⚽ Spor Haberleri", m29: "🕋 Namaz Vakitleri", m30: "💱 Döviz Kurları",
+    m31: "📊 Gündem Bilgileri", m32: "👩 Kadın Dünyası", m33: "👨 Erkek Dünyası", m34: "❤️ Aşk Dünyası", m35: "🖼 Durum Resimleri",
+    m36: "🧠 Psikoloji", m37: "🧩 Psikolojik Testler", m38: "💡 Elektrik borcunu öğren", m39: "🔥 Doğalgaz borcunu öğren", m40: "💧 Su borcunu öğren",
+    m41: "🌐 Çevrimiçi Çeviri", m42: "♓ Burç Kontrol", m43: "✨ Burçların Sırrı", m44: "🗺 Çevrimiçi Harita", m45: "🎂 Doğum gününü hesapla",
+    m46: "📅 Hangi gün doğdun?", m47: "⚖️ İdeal kilonu hesapla", m48: "📝 Sınav sonuçlarını hesapla", m49: "✍️ Metni Farklı Yaz", m50: "❌⭕ X - O Oyunu",
+    m51: "♟ Dama Oyunu", m52: "🔮 Online Sihir", m53: "📐 İkinci Derece Denklemi Çöz", m54: "🧮 Online Hesap Makinesi", m55: "💰 İzin süresince maaş hesaplama",
+    m56: "📡 Wap+Web Tarayıcı", m57: "🌍 Alan Adı Kontrol", m58: "💳 Webmoney Hesapla (WMR)", m59: "🌐 Dünya Alan Adları", m60: "📍 IP Bul",
+    m61: "💻 Kodlama", m62: "⚙️ Grab Hazırla", m63: "🔣 Sembol Kodları", m64: "🔤 Harf Kodları", m65: "🎨 Renk Kodları",
+    m66: "🙂 Emoji Oluştur", m67: "🔘 Buton Oluştur", m68: "🤔 İlginç Bilgiler", m69: "💄 Moda ve Güzellik", m70: "🏥 Sağlık",
+    m71: "👨‍👩‍👧 Aile ve Çocuk", m72: "🍲 Mutfak", m73: "📖 Ortaokul Ders Kitapları (Online)", m74: "📘 Meslek Okulu Ders Kitapları (Online)",
+    m75: "📝 Kompozisyonlar koleksiyonu", m76: "📜 Atasözleri ve Masallar", m77: "💬 Aforizmalar - Dahilerin sözleri", m78: "❓ Bulmacalar", m79: "😂 Fıkralar", m80: "🧚 Masallar"
+  },
+
+  ru: {
+    brand: "tatli.biz — Портал",
+    searchPlaceholder: "Поиск: номер, название или эмодзи",
+    clearBtn: "Очистить",
+    hint: "Список построчно — оптимизировано для мобильных",
+    footerAuthor: "Автор: <strong>Azmi</strong>",
+    footerNote: "Создан помощником.",
+    footerYears: "2023 - 2026",
+    m1: "📥 Скачать Whatsapp Plus", m2: "📥 Скачать Instagram Plus", m3: "📥 Скачать Youtube Plus", m4: "📥 Скачать TikTok Plus", m5: "🔐 Скачать ArgoVPN Pro",
+    m6: "🖼 Восстановление удалённых фотографий", m7: "🎵 Поиск песни", m8: "🔎 Поиск по изображению", m9: "🔗 Полезные ссылки", m10: "ℹ️ Поиск информации",
+    m11: "📚 Поиск в Wikipedia", m12: "🔍 Общий поиск", m13: "📱 Известные личности", m14: "💊 Поиск лекарств (цена)", m15: "🎬 Фильмы",
+    m16: "📺 Сериалы", m17: "🕌 Коран - аудио (азербайджанский)", m18: "🕌 Коран - аудио (турецкий)", m19: "🕌 Коран - аудио (русский)", m20: "🕌 Коран - аудио (арабский)",
+    m21: "📰 Последние новости", m22: "🗞 Новостная лента", m23: "🌟 Новости шоу-бизнеса", m24: "🌍 Разные новости", m25: "🌦 Погода на сегодня",
+    m26: "♈ Ежедневный гороскоп", m27: "🦠 COVID-19 — онлайн", m28: "⚽ Спортивные новости", m29: "🕋 Время молитв", m30: "💱 Курсы валют",
+    m31: "📊 Актуальная информация", m32: "👩 Мир женщин", m33: "👨 Мир мужчин", m34: "❤️ Мир любви", m35: "🖼 Статус-картинки",
+    m36: "🧠 Психология", m37: "🧩 Психологические тесты", m38: "💡 Узнать задолженность за электроэнергию", m39: "🔥 Узнать задолженность за газ", m40: "💧 Узнать задолженность за воду",
+    m41: "🌐 Онлайн-перевод", m42: "♓ Проверить знак зодиака", m43: "✨ Тайны гороскопов", m44: "🗺 Онлайн-карта", m45: "🎂 Рассчитать день рождения",
+    m46: "📅 В какой день вы родились?", m47: "⚖️ Рассчитать идеальный вес", m48: "📝 Рассчитать результаты экзамена", m49: "✍️ Переписать текст по-другому", m50: "❌⭕ Крестики-нолики",
+    m51: "♟ Шашки", m52: "🔮 Онлайн магия", m53: "📐 Решить квадратное уравнение", m54: "🧮 Онлайн-калькулятор", m55: "💰 Рассчитать зарплату за простой",
+    m56: "📡 Wap+Web Сканер", m57: "🌍 Проверить домен", m58: "💳 Рассчитать Webmoney (WMR)", m59: "🌐 Мировые домены", m60: "📍 Поиск IP",
+    m61: "💻 Программирование", m62: "⚙️ Подготовить Grab", m63: "🔣 Коды символов", m64: "🔤 Коды букв", m65: "🎨 Цветовые коды",
+    m66: "🙂 Создать смайл", m67: "🔘 Создать кнопку", m68: "🤔 Интересные факты", m69: "💄 Мода и Красота", m70: "🏥 Здоровье",
+    m71: "👨‍👩‍👧 Семья и дети", m72: "🍲 Кухня", m73: "📖 Школьные учебники (онлайн)", m74: "📘 Профессиональные учебники (онлайн)", m75: "📝 Сборник сочинений",
+    m76: "📜 Пословицы и сказки", m77: "💬 Афоризмы - слова мудрых", m78: "❓ Загадки", m79: "😂 Анекдоты", m80: "🧚 Сказки"
+  },
+
+  ua: {
+    brand: "tatli.biz — Портал",
+    searchPlaceholder: "Пошук: номер, назва або емодзі",
+    clearBtn: "Очистити",
+    hint: "Список рядок за рядком — оптимізовано для мобільних",
+    footerAuthor: "Автор: <strong>Azmi</strong>",
+    footerNote: "Створено помічником.",
+    footerYears: "2023 - 2026",
+    m1: "📥 Завантажити Whatsapp Plus", m2: "📥 Завантажити Instagram Plus", m3: "📥 Завантажити Youtube Plus", m4: "📥 Завантажити TikTok Plus", m5: "🔐 Завантажити ArgoVPN Pro",
+    m6: "🖼 Відновлення видалених зображень", m7: "🎵 Знайти пісню", m8: "🔎 Пошук зображення", m9: "🔗 Корисні посилання", m10: "ℹ️ Пошук інформації",
+    m11: "📚 Пошук у Wikipedia", m12: "🔍 Загальний пошук", m13: "📱 Відомі особистості", m14: "💊 Пошук ліків (ціна)", m15: "🎬 Фільми",
+    m16: "📺 Серіали", m17: "🕌 Коран - аудіо (азербайджанською)", m18: "🕌 Коран - аудіо (турецькою)", m19: "🕌 Коран - аудіо (російською)", m20: "🕌 Коран - аудіо (арабською)",
+    m21: "📰 Останні новини", m22: "🗞 Нова стрічка", m23: "🌟 Новини шоу-бізнесу", m24: "🌍 Різні новини", m25: "🌦 Погода на сьогодні",
+    m26: "♈ Щоденні гороскопи", m27: "🦠 COVID-19 — онлайн", m28: "⚽ Спортивні новини", m29: "🕋 Часи молитв", m30: "💱 Курси валют",
+    m31: "📊 Актуальні теми", m32: "👩 Світ жінок", m33: "👨 Світ чоловіків", m34: "❤️ Світ кохання", m35: "🖼 Статус-зображення",
+    m36: "🧠 Психологія", m37: "🧩 Психологічні тести", m38: "💡 Дізнатися борг за світло", m39: "🔥 Дізнатися борг за газ", m40: "💧 Дізнатися борг за воду",
+    m41: "🌐 Онлайн-переклад", m42: "♓ Перевірити знак зодіаку", m43: "✨ Таємниці гороскопів", m44: "🗺 Онлайн-карта", m45: "🎂 Розрахувати день народження",
+    m46: "📅 В який день ви народилися?", m47: "⚖️ Розрахувати ідеальну вагу", m48: "📝 Розрахувати результати іспиту", m49: "✍️ Переписати текст по-іншому", m50: "❌⭕ Гра Х-О",
+    m51: "♟ Гра в шашки", m52: "🔮 Онлайн магія", m53: "📐 Розв'язати квадратне рівняння", m54: "🧮 Онлайн-калькулятор", m55: "💰 Розрахунок зарплати під час простою",
+    m56: "📡 Wap+Web Сканер", m57: "🌍 Перевірити домен", m58: "💳 Розрахувати Webmoney (WMR)", m59: "🌐 Світові домени", m60: "📍 Знайти IP",
+    m61: "💻 Кодування", m62: "⚙️ Підготувати Grab", m63: "🔣 Коди символів", m64: "🔤 Коди літер", m65: "🎨 Коди кольорів",
+    m66: "🙂 Створити смайл", m67: "🔘 Створити кнопку", m68: "🤔 Цікаві факти", m69: "💄 Мода та краса", m70: "🏥 Здоров'я",
+    m71: "👨‍👩‍👧 Сім'я та діти", m72: "🍲 Кухня", m73: "📖 Шкільні підручники (онлайн)", m74: "📘 Професійні підручники (онлайн)", m75: "📝 Збірник есе",
+    m76: "📜 Народні прислів'я та казки", m77: "💬 Афоризми - слова мудрих", m78: "❓ Загадки", m79: "😂 Жарти", m80: "🧚 Казки"
+  },
+
+  en: {
+    brand: "tatli.biz — Portal",
+    searchPlaceholder: "Search: number, name or emoji",
+    clearBtn: "Clear",
+    hint: "List line by line — optimized for mobile",
+    footerAuthor: "Author: <strong>Azmi</strong>",
+    footerNote: "Created by assistant.",
+    footerYears: "2023 - 2026",
+    m1: "📥 Download Whatsapp Plus", m2: "📥 Download Instagram Plus", m3: "📥 Download Youtube Plus", m4: "📥 Download TikTok Plus", m5: "🔐 Download ArgoVPN Pro",
+    m6: "🖼 Restore deleted photos", m7: "🎵 Find a song", m8: "🔎 Image search", m9: "🔗 Useful links", m10: "ℹ️ Search information",
+    m11: "📚 Search on Wikipedia", m12: "🔍 General search", m13: "📱 Famous people", m14: "💊 Find medicine (price)", m15: "🎬 Movies",
+    m16: "📺 Series", m17: "🕌 Quran - Audio (Azerbaijani)", m18: "🕌 Quran - Audio (Turkish)", m19: "🕌 Quran - Audio (Russian)", m20: "🕌 Quran - Audio (Arabic)",
+    m21: "📰 Latest news", m22: "🗞 News feed", m23: "🌟 Showbiz news", m24: "🌍 Mixed news", m25: "🌦 Daily weather",
+    m26: "♈ Daily horoscopes", m27: "🦠 COVID-19 live", m28: "⚽ Sports news", m29: "🕋 Prayer times", m30: "💱 Currency rates",
+    m31: "📊 Agenda info", m32: "👩 Women section", m33: "👨 Men section", m34: "❤️ Love section", m35: "🖼 Status pictures",
+    m36: "🧠 Psychology", m37: "🧩 Psychological tests", m38: "💡 Check electricity bill", m39: "🔥 Check gas bill", m40: "💧 Check water bill",
+    m41: "🌐 Online translation", m42: "♓ Check zodiac", m43: "✨ Horoscope secrets", m44: "🗺 Online map", m45: "🎂 Calculate birthday",
+    m46: "📅 Which weekday were you born?", m47: "⚖️ Calculate ideal weight", m48: "📝 Calculate exam results", m49: "✍️ Rephrase text", m50: "❌⭕ Tic-Tac-Toe",
+    m51: "♟ Checkers", m52: "🔮 Online magic", m53: "📐 Solve quadratic equation", m54: "🧮 Online calculator", m55: "💰 Calculate salary for downtime",
+    m56: "📡 Wap+Web scanner", m57: "🌍 Check domain", m58: "💳 Webmoney calc (WMR)", m59: "🌐 World domains", m60: "📍 IP lookup",
+    m61: "💻 Coding", m62: "⚙️ Prepare grab", m63: "🔣 Symbol codes", m64: "🔤 Letter codes", m65: "🎨 Color codes",
+    m66: "🙂 Create smile", m67: "🔘 Create button", m68: "🤔 Interesting facts", m69: "💄 Fashion & Beauty", m70: "🏥 Health",
+    m71: "👨‍👩‍👧 Family & child", m72: "🍲 Recipes", m73: "📖 School textbooks (online)", m74: "📘 Vocational textbooks (online)", m75: "📝 Collection of essays",
+    m76: "📜 Proverbs and tales", m77: "💬 Aphorisms - Words of geniuses", m78: "❓ Riddles", m79: "😂 Jokes", m80: "🧚 Fairy tales"
+  }
+};
+
+/* ---------- Titles array not needed separately: we'll use translations[lang].mX keys ---------- */
+
+/* ---------- Category mapping (indices) ---------- */
+const categories = {
+  "Yükləmələr": [1,2,3,4,5],
+  "Bərpa & Media": [6,7,8,35],
+  "Axtarış & Məlumat": [9,10,11,12,41,68],
+  "Dini": [17,18,19,20,29],
+  "Xəbərlər & Gündəm": [21,22,23,24,31,28],
+  "Hava, Bürc, Sağlamlıq": [25,26,27,14,70],
+  "Xidmətlər & Hesablayıcılar": [30,38,39,40,45,46,47,48,53,54,55],
+  "Vebmaster & Alətlər": [56,57,58,59,60,61,62,63,64,65,66,67],
+  "İnsanlar & Cəmiyyət": [13,32,33,34,71,69],
+  "Əyləncə & Oyunlar": [15,16,50,51,52,78,79,80],
+  "Təhsil & Yazılar": [73,74,75,76,77,49],
+  "Digər": [31,61,62]
+};
+
+/* ---------- Language management ---------- */
+const supported = ['az','tr','ru','ua','en'];
+const defaultLang = 'az';
+const storageKey = 'site_lang';
+
+function getLangFromPath(){
+  const seg = location.pathname.split('/').filter(Boolean);
+  if(seg.length && supported.includes(seg[0])) return seg[0];
+  return null;
+}
+function setLangInPath(lang){
+  const seg = location.pathname.split('/').filter(Boolean);
+  if(seg.length && supported.includes(seg[0])) seg[0] = lang;
+  else seg.unshift(lang);
+  const newPath = '/' + seg.join('/') + location.search + location.hash;
+  history.replaceState({}, '', newPath);
+}
+function saveLang(lang){
+  try{ localStorage.setItem(storageKey, lang); } catch(e){}
+  document.cookie = "site_lang="+encodeURIComponent(lang)+"; path=/; max-age=" + (60*60*24*30);
+}
+function loadSavedLang(){
+  try{
+    const ls = localStorage.getItem(storageKey);
+    if(ls && supported.includes(ls)) return ls;
+  } catch(e){}
+  const match = document.cookie.match(/(?:^|;\s*)site_lang=([^;]+)/);
+  if(match){
+    const c = decodeURIComponent(match[1]);
+    if(supported.includes(c)) return c;
+  }
+  return null;
+}
+function getInitialLang(){
+  const pathLang = getLangFromPath();
+  if(pathLang) return pathLang;
+  const saved = loadSavedLang();
+  if(saved) return saved;
+  const nav = (navigator.language || navigator.userLanguage || '').slice(0,2).toLowerCase();
+  if(nav === 'tr') return 'tr';
+  if(nav === 'ru') return 'ru';
+  if(nav === 'uk' || nav === 'ua') return 'ua';
+  if(nav === 'en') return 'en';
+  return defaultLang;
+}
+let currentLang = getInitialLang();
+
+/* ---------- i18n helpers ---------- */
+function t(key){
+  if(!translations[currentLang]) return key;
+  return translations[currentLang][key] || key;
+}
+function applyStaticTranslations(){
+  // static elements
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k = el.getAttribute('data-i18n');
+    el.innerHTML = t(k);
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    const k = el.getAttribute('data-i18n-placeholder');
+    el.setAttribute('placeholder', t(k));
+  });
+  // set search placeholder
+  const q = document.getElementById('searchInput');
+  if(q) q.setAttribute('placeholder', t('searchPlaceholder'));
+  // clear button
+  const clearBtn = document.getElementById('clearSearch');
+  if(clearBtn) clearBtn.textContent = t('clearBtn');
+}
+
+/* ---------- Render menu ---------- */
+const menuContainer = document.getElementById('menuContainer');
+function menuLabelFor(i){
+  const key = 'm'+i;
+  return t(key);
+}
+function renderMenu(filterText = ''){
+  menuContainer.innerHTML = '';
+  Object.keys(categories).forEach(catName=>{
+    const ids = categories[catName];
+    const matched = ids.filter(i=>{
+      const text = (menuLabelFor(i) || '').toLowerCase();
+      if(!filterText) return true;
+      const f = filterText.toLowerCase();
+      return text.includes(f) || String(i).includes(f);
+    });
+    if(matched.length === 0) return;
+    const sec = document.createElement('section');
+    sec.className = 'list-section';
+    const h = document.createElement('h3');
+    h.textContent = catName;
+    sec.appendChild(h);
+    const ul = document.createElement('ul');
+    ul.className = 'menu';
+    matched.forEach(i=>{
+      const li = document.createElement('li');
+      li.className = 'menu-item';
+      const a = document.createElement('a');
+      a.className = 'menu-link';
+      a.href = '#';
+      a.dataset.id = i;
+      a.innerHTML = `<span class="num">${i}</span><span class="title">${escapeHtml(menuLabelFor(i))}</span><span class="meta"></span>`;
+      a.addEventListener('click', onItemClick);
+      li.appendChild(a);
+      ul.appendChild(li);
+    });
+    sec.appendChild(ul);
+    menuContainer.appendChild(sec);
+  });
+}
+
+/* ---------- Live clock ---------- */
+function pad(n){return n<10? '0'+n : n}
+function updateClock(){
+  const d = new Date();
+  const y = d.getFullYear();
+  const mo = pad(d.getMonth()+1);
+  const day = pad(d.getDate());
+  const hh = pad(d.getHours());
+  const mm = pad(d.getMinutes());
+  const ss = pad(d.getSeconds());
+  document.getElementById('liveDate').textContent = `${day}.${mo}.${y} ${hh}:${mm}:${ss}`;
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+/* ---------- Search ---------- */
+const searchInput = document.getElementById('searchInput');
+const clearSearch = document.getElementById('clearSearch');
+searchInput.addEventListener('input', ()=> renderMenu(searchInput.value.trim()));
+clearSearch.addEventListener('click', ()=> { searchInput.value=''; renderMenu(); searchInput.focus(); });
+
+/* ---------- SPA navigation ---------- */
+const contentArea = document.getElementById('contentArea');
+function showMenu(){ contentArea.style.display='none'; menuContainer.style.display='block'; }
+function showContent(){ contentArea.style.display='block'; menuContainer.style.display='none'; window.scrollTo({top:0,behavior:'smooth'}); }
+function makeBackButton(){
+  const btn = document.createElement('a');
+  btn.className = 'back-btn';
+  btn.href = '#';
+  btn.textContent = '⬅️ ' + (t('backHome') || 'Ana Səhifəyə Qayıt');
+  btn.addEventListener('click', (e)=>{
+    e.preventDefault();
+    showMenu();
+    document.getElementById('overlayMsg').style.display='none';
+  });
+  return btn;
+}
+
+/* add translation for back button default if missing */
+Object.keys(translations).forEach(lang=>{
+  if(!translations[lang]['backHome']) translations[lang]['backHome'] = (lang === 'tr' ? 'Ana Sayfaya Dön' : (lang === 'ru' ? 'На Главную' : (lang === 'ua' ? "Повернутися на головну" : 'Ana Səhifəyə Qayıt')));
+});
+
+/* ---------- Item click ---------- */
+function onItemClick(e){
+  e.preventDefault();
+  const id = Number(this.dataset.id);
+  openSection(id);
+}
+
+/* ---------- Section renderer (localized) ---------- */
+function openSection(id){
+  contentArea.innerHTML = '';
+  const back = makeBackButton();
+  contentArea.appendChild(back);
+
+  const h = document.createElement('h2');
+  h.style.marginTop='8px';
+  h.style.fontSize='16px';
+  h.textContent = `${id}. ${menuLabelFor(id) || ('m'+id)}`;
+  contentArea.appendChild(h);
+
+  // localized description card for non-implemented ones
+  const placeholderCard = document.createElement('div');
+  placeholderCard.className = 'card';
+  placeholderCard.innerHTML = `<p>${escapeHtml(t('m'+id) || '')}</p><p class="small">${escapeHtml(t('comingSoon') || 'Bu bölmə üzərində iş gedir.')}<br/><small>${escapeHtml(t('author') || 'Müəllif: Azmi')}</small></p>`;
+
+  // Provide localized strings for placeholders if missing
+  Object.keys(translations).forEach(l=>{
+    if(!translations[l]['comingSoon']) translations[l]['comingSoon'] = (l==='tr' ? 'Bu bölüm üzerinde çalışma devam ediyor.' : (l==='ru' ? 'Раздел в разработке.' : (l==='ua' ? 'Розділ у розробці.' : 'Bu bölmə üzərində iş gedir.')));
+    if(!translations[l]['author']) translations[l]['author'] = (l==='tr' ? 'Yazar: Azmi' : (l==='ru' ? 'Автор: Azmi' : (l==='ua' ? 'Автор: Azmi' : 'Müəllif: Azmi')));
+  });
+
+  // Special implemented sections: 1 (Whatsapp info), 25 (Weather), 38 (Electricity)
+  if(id === 1){
+    renderWhatsappPlus(contentArea);
+  } else if(id === 25){
+    renderWeather(contentArea);
+  } else if(id === 38){
+    renderElectricity(contentArea);
+  } else {
+    contentArea.appendChild(placeholderCard);
+  }
+
+  showContent();
+}
+
+/* ---------- Implemented sections (localized) ---------- */
+function renderWhatsappPlus(container){
+  const info = document.createElement('div');
+  info.className = 'card';
+  info.innerHTML = `
+    <p><strong>${escapeHtml(menuLabelFor(1))}</strong></p>
+    <p class="small">${escapeHtml(t('whatsNote') || 'Mod tətbiqlər rəsmi deyil və təhlükə yarada bilər.')}</p>
+    <ul style="margin:8px 0 0 18px;color:#0b1822">
+      <li>${escapeHtml(t('whatsTip1') || 'Rəsmi WhatsApp: Play/App Store istifadə edin.')}</li>
+      <li>${escapeHtml(t('whatsTip2') || 'Üçüncü tərəf APK-ları təhlükəlidir.')}</li>
+      <li>${escapeHtml(t('whatsTip3') || 'Alternativ: WhatsApp Web və Business (rəsmi).')}</li>
+    </ul>
+  `;
+  container.appendChild(info);
+
+  const actions = document.createElement('div');
+  actions.style.display='flex';
+  actions.style.gap='8px';
+  actions.style.flexWrap='wrap';
+
+  const btnPlay = document.createElement('a');
+  btnPlay.className = 'btn';
+  btnPlay.href = 'https://play.google.com/store/apps/details?id=com.whatsapp';
+  btnPlay.target = '_blank';
+  btnPlay.rel = 'noopener noreferrer';
+  btnPlay.textContent = (t('officialPlay') || 'Rəsmi WhatsApp (Play)');
+
+  const btnWeb = document.createElement('a');
+  btnWeb.className = 'btn';
+  btnWeb.href = 'https://www.whatsapp.com/download';
+  btnWeb.target = '_blank';
+  btnWeb.rel = 'noopener noreferrer';
+  btnWeb.textContent = (t('officialSite') || 'WhatsApp Rəsmi Sayt');
+
+  actions.appendChild(btnPlay);
+  actions.appendChild(btnWeb);
+  container.appendChild(actions);
+
+  // Localized form
+  const formCard = document.createElement('div');
+  formCard.className = 'card';
+  formCard.innerHTML = `
+    <strong>${escapeHtml(t('requestLink') || 'Yükləmə linki tələb et (simulyasiya)')}</strong>
+    <p class="small">${escapeHtml(t('requestNote') || 'Forma yalnız lokal simulyasiyadır.')}</p>
+    <label>${escapeHtml(t('phoneLabel') || 'Telefon (opsional)')}</label>
+    <input id="wPhone" type="text" placeholder="${escapeHtml(t('phonePlaceholder') || '+994xxxxxxxx')}" />
+    <label>${escapeHtml(t('noteLabel') || 'Qısa qeyd (opsional)')}</label>
+    <input id="wNote" type="text" placeholder="${escapeHtml(t('notePlaceholder') || 'Nəyə ehtiyacınız var?')}" />
+    <div style="margin-top:8px"><button id="wRequest" class="btn">${escapeHtml(t('prepareLinkBtn') || 'Linki hazırla (lokal)')}</button></div>
+    <div id="wResult" class="small" style="margin-top:8px;color:#0b1822"></div>
+  `;
+  container.appendChild(formCard);
+
+  document.getElementById('wRequest').addEventListener('click', function(){
+    const phone = document.getElementById('wPhone').value.trim();
+    const note = document.getElementById('wNote').value.trim();
+    const res = document.getElementById('wResult');
+    res.innerHTML = `${escapeHtml(t('linksShown') || 'Rəsmi linklər göstərildi.')}<br/>${escapeHtml(t('safety') || 'Təhlükəsizlik: üçüncü tərəf APK-ları yükləməyin.')}<br/>${note ? escapeHtml(note) : '—'}${phone ? `<br/>${escapeHtml(t('contact')) || 'Əlaqı'}: ${escapeHtml(phone)}` : ''}`;
+    showOverlay(t('linksShown'));
+  });
+}
+
+/* Localized strings used in Whatsapp form (ensure defaults exist) */
+Object.keys(translations).forEach(lang=>{
+  const L = translations[lang];
+  if(!L['whatsNote']) L['whatsNote'] = (lang==='tr'?'Mod uygulamalar resmi değildir ve risklidir.':'Mod tətbiqlər rəsmi deyil və təhlükə yarada bilər.');
+  if(!L['whatsTip1']) L['whatsTip1'] = (lang==='tr'?'Resmi WhatsApp: Play/App Store kullanın.':'Rəsmi WhatsApp: Play/App Store istifadə edin.');
+  if(!L['whatsTip2']) L['whatsTip2'] = (lang==='tr'?'Üçüncü taraf APK'leri tehlikelidir.':'Üçüncü tərəf APK-ları təhlükəlidir.');
+  if(!L['whatsTip3']) L['whatsTip3'] = (lang==='tr'?'Alternatif: WhatsApp Web ve Business (resmi).':'Alternativ: WhatsApp Web və WhatsApp Business (rəsmi).');
+  if(!L['officialPlay']) L['officialPlay'] = (lang==='tr'?'Resmi WhatsApp (Play)':'Rəsmi WhatsApp (Play)');
+  if(!L['officialSite']) L['officialSite'] = (lang==='tr'?'WhatsApp Resmi Site':'WhatsApp Rəsmi Sayt');
+  if(!L['requestLink']) L['requestLink'] = (lang==='tr'?'İndirme linki talep et (simülasyon)':'Yükləmə linki tələb et (simulyasiya)');
+  if(!L['requestNote']) L['requestNote'] = (lang==='tr'?'Form sadece yerel simülasyondur.':'Forma yalnız lokal simulyasiyadır.');
+  if(!L['phoneLabel']) L['phoneLabel'] = (lang==='tr'?'Telefon (opsiyonel)':'Telefon (opsional)');
+  if(!L['noteLabel']) L['noteLabel'] = (lang==='tr'?'Kısa not (opsiyonel)':'Qısa qeyd (opsional)');
+  if(!L['phonePlaceholder']) L['phonePlaceholder'] = '+994xxxxxxxx';
+  if(!L['notePlaceholder']) L['notePlaceholder'] = (lang==='tr'?'İhtiyacınız nedir?':'Nəyə ehtiyacınız var?');
+  if(!L['prepareLinkBtn']) L['prepareLinkBtn'] = (lang==='tr'?'Linki hazırla (lokal)':'Linki hazırla (lokal)');
+  if(!L['linksShown']) L['linksShown'] = (lang==='tr'?'Linkler gösterildi.':'Rəsmi linklər göstərildi.');
+  if(!L['safety']) L['safety'] = (lang==='tr'?'Güvenlik: üçüncü taraf APK\'leri yüklemeyin.':'Təhlükəsizlik: üçüncü tərəf APK-ları yükləməyin.');
+  if(!L['contact']) L['contact'] = (lang==='tr'?'İletişim':'Əlaqə');
+});
+
+/* ---------- Weather (localized labels) ---------- */
+function renderWeather(container){
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <strong>${escapeHtml(menuLabelFor(25))}</strong>
+    <p class="small">${escapeHtml(t('weatherNote') || 'Şəhər adı daxil edin. Open-Meteo istifadə olunur.')}</p>
+    <label>${escapeHtml(t('cityLabel') || 'Şəhər adı')}</label>
+    <input id="city" type="text" placeholder="${escapeHtml(t('cityPlaceholder') || 'Bakı, Istanbul...')}" />
+    <div style="margin-top:8px"><button id="getWeather" class="btn">${escapeHtml(t('getWeatherBtn') || 'Hava al')}</button></div>
+    <div id="weatherResult" style="margin-top:10px"></div>
+  `;
+  container.appendChild(card);
+
+  document.getElementById('getWeather').addEventListener('click', async function(){
+    const city = document.getElementById('city').value.trim();
+    const out = document.getElementById('weatherResult');
+    out.innerHTML = '';
+    if(!city){ out.innerHTML = `<div class="small" style="color:#c33">${escapeHtml(t('enterCity') || 'Şəhər daxil edin.')}</div>`; return; }
+    out.innerHTML = `<div class="small">${escapeHtml(t('loading') || 'Yüklənir...')}</div>`;
+    try {
+      const geoResp = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=5`);
+      if(!geoResp.ok) throw new Error('Geocoding error');
+      const geo = await geoResp.json();
+      if(!geo.results || geo.results.length === 0){ out.innerHTML = `<div class="small">${escapeHtml(t('cityNotFound') || 'Şəhər tapılmadı.')}</div>`; return; }
+      const place = geo.results[0];
+      const lat = place.latitude, lon = place.longitude;
+      const fResp = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`);
+      if(!fResp.ok) throw new Error('Forecast error');
+      const f = await fResp.json();
+      const cw = f.current_weather;
+      out.innerHTML = `
+        <div><strong>${escapeHtml(place.name)}, ${escapeHtml(place.country)}</strong></div>
+        <div class="small">Lat: ${lat.toFixed(3)}, Lon: ${lon.toFixed(3)}</div>
+        <div style="margin-top:8px"><strong>${escapeHtml(t('temperature') || 'Temperatur')}:</strong> ${cw.temperature} °C</div>
+        <div class="small">${escapeHtml(t('wind') || 'Rüzgar')}: ${cw.windspeed} m/s, dir ${cw.winddirection}°</div>
+        <div class="small">${escapeHtml(t('time') || 'Məlumat vaxtı')}: ${escapeHtml(cw.time)}</div>
+        <div style="margin-top:8px"><a class="btn" href="https://www.open-meteo.com/" target="_blank" rel="noopener noreferrer">${escapeHtml(t('openMeteo') || 'Open-Meteo')}</a></div>
+      `;
+    } catch (err){
+      out.innerHTML = `<div class="small" style="color:#c33">${escapeHtml(t('error') || 'Xəta')}: ${escapeHtml(err.message)}</div>`;
+    }
+  });
+}
+Object.keys(translations).forEach(l=>{
+  const o = translations[l];
+  if(!o['weatherNote']) o['weatherNote'] = (l==='tr'?'Şehir adı girin. Open-Meteo kullanılır.':'Şəhər adı daxil edin. Open-Meteo istifadə olunur.');
+  if(!o['cityLabel']) o['cityLabel'] = (l==='tr'?'Şehir adı':'Şəhər adı');
+  if(!o['cityPlaceholder']) o['cityPlaceholder'] = (l==='tr'?'İstanbul, Baku...':'Bakı, Istanbul...');
+  if(!o['getWeatherBtn']) o['getWeatherBtn'] = (l==='tr'?'Hava al':'Hava al');
+  if(!o['enterCity']) o['enterCity'] = (l==='tr'?'Şehir girin':'Şəhər daxil edin.');
+  if(!o['loading']) o['loading'] = (l==='tr'?'Yükleniyor...':'Yüklənir...');
+  if(!o['cityNotFound']) o['cityNotFound'] = (l==='tr'?'Şehir bulunamadı':'Şəhər tapılmadı.');
+  if(!o['temperature']) o['temperature'] = (l==='tr'?'Sıcaklık':'Temperatur');
+  if(!o['wind']) o['wind'] = (l==='tr'?'Rüzgar':'Rüzgar');
+  if(!o['time']) o['time'] = (l==='tr'?'Zaman':'Məlumat vaxtı');
+  if(!o['openMeteo']) o['openMeteo'] = 'Open-Meteo';
+  if(!o['error']) o['error'] = (l==='tr'?'Hata':'Xəta');
+});
+
+/* ---------- Electricity section localized ---------- */
+function renderElectricity(container){
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <strong>${escapeHtml(menuLabelFor(38))}</strong>
+    <p class="small">${escapeHtml(t('elecNote') || 'Keçmiş və indiki sayğac oxunu daxil edin. Qiymət AZN/kWh daxil edin.')}</p>
+    <label>${escapeHtml(t('prevLabel') || 'Keçmiş oxunu (kWh)')}</label>
+    <input id="prev" type="number" min="0" step="0.1" />
+    <label>${escapeHtml(t('currLabel') || 'İndiki oxunu (kWh)')}</label>
+    <input id="curr" type="number" min="0" step="0.1" />
+    <label>${escapeHtml(t('priceLabel') || 'Qiymət (AZN/kWh)')}</label>
+    <input id="price" type="number" min="0" step="0.01" value="0.13" />
+    <div style="margin-top:8px"><button id="calcBill" class="btn">${escapeHtml(t('calcBtn') || 'Hesabla')}</button></div>
+    <div id="billResult" style="margin-top:10px"></div>
+  `;
+  container.appendChild(card);
+
+  document.getElementById('calcBill').addEventListener('click', function(){
+    const prev = parseFloat(document.getElementById('prev').value);
+    const curr = parseFloat(document.getElementById('curr').value);
+    const price = parseFloat(document.getElementById('price').value);
+    const out = document.getElementById('billResult');
+    out.innerHTML = '';
+    if(isNaN(prev) || isNaN(curr) || isNaN(price)){ out.innerHTML = `<div class="small" style="color:#c33">${escapeHtml(t('fillAll') || 'Zəhmət olmasa bütün sahələri doldurun.')}</div>`; return; }
+    if(curr < prev){ out.innerHTML = `<div class="small" style="color:#c33">${escapeHtml(t('currLessPrev') || 'İndiki oxunu keçmişdən kiçik ola bilməz.')}</div>`; return; }
+    const consumption = curr - prev;
+    const amount = consumption * price;
+    out.innerHTML = `
+      <div class="small"><strong>${escapeHtml(t('usage') || 'İstifadə')}:</strong> ${consumption.toFixed(2)} kWh</div>
+      <div class="small"><strong>${escapeHtml(t('amount') || 'Məbləğ')}:</strong> ${amount.toFixed(2)} AZN</div>
+      <div class="small">${escapeHtml(t('note') || 'Qeyd: Bu hesablamalar təxmini göstərir.')}</div>
+    `;
+  });
+}
+Object.keys(translations).forEach(l=>{
+  const o = translations[l];
+  if(!o['elecNote']) o['elecNote'] = (l==='tr'?'Geçmiş ve şu anki sayaç değerlerini girin. Fiyat AZN/kWh olarak.':'Keçmiş və indiki sayğac oxunu daxil edin. Qiymət AZN/kWh daxil edin.');
+  if(!o['prevLabel']) o['prevLabel'] = (l==='tr'?'Önceki sayaç (kWh)':'Keçmiş oxunu (kWh)');
+  if(!o['currLabel']) o['currLabel'] = (l==='tr'?'Şimdiki sayaç (kWh)':'İndiki oxunu (kWh)');
+  if(!o['priceLabel']) o['priceLabel'] = (l==='tr'?'Fiyat (AZN/kWh)':'Qiymət (AZN/kWh)');
+  if(!o['calcBtn']) o['calcBtn'] = (l==='tr'?'Hesapla':'Hesabla');
+  if(!o['fillAll']) o['fillAll'] = (l==='tr'?'Lütfen tüm alanları doldurun.':'Zəhmət olmasa bütün sahələri doldurun.');
+  if(!o['currLessPrev']) o['currLessPrev'] = (l==='tr'?'Şimdiki değer önceki değerden küçük olamaz.':'İndiki oxunu keçmişdən kiçik ola bilməz.');
+  if(!o['usage']) o['usage'] = (l==='tr'?'Kullanım':'İstifadə');
+  if(!o['amount']) o['amount'] = (l==='tr'?'Tutar':'Məbləğ');
+  if(!o['note']) o['note'] = (l==='tr'?'Not: Bu hesaplama yaklaşık değer gösterir.':'Qeyd: Bu hesablamalar təxmini göstərir.');
+});
+
+/* ---------- Overlay and helpers ---------- */
+function showOverlay(msg, timeout=2000){
+  const ov = document.getElementById('overlayMsg');
+  ov.innerHTML = `<div style="font-size:14px">${escapeHtml(msg)}</div>`;
+  ov.style.display = 'block';
+  setTimeout(()=>{ ov.style.display = 'none'; }, timeout);
+}
+function escapeHtml(str){
+  if(typeof str !== 'string') return str;
+  return str.replace(/[&<>"']/g, function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; });
+}
+
+/* ---------- Language buttons ---------- */
+function updateLangButtons(){
+  document.querySelectorAll('.lang-btn').forEach(btn=>{
+    const l = btn.dataset.lang;
+    if(l === currentLang) btn.classList.add('active'); else btn.classList.remove('active');
+  });
+}
+document.querySelectorAll('.lang-btn').forEach(btn=>{
+  btn.addEventListener('click', function(){
+    const lang = this.dataset.lang;
+    if(!supported.includes(lang)) return;
+    currentLang = lang;
+    applyStaticTranslations();
+    renderMenu(searchInput.value.trim());
+    updateLangButtons();
+    saveLang(lang);
+    setLangInPath(lang);
+    // update back button text if content visible
+    document.querySelectorAll('.back-btn').forEach(b => b.textContent = '⬅️ ' + (t('backHome') || 'Ana Səhifəyə Qayıt'));
+  });
+});
+
+/* ---------- Initial setup ---------- */
+function init(){
+  // Apply language
+  if(!supported.includes(currentLang)) currentLang = defaultLang;
+  applyStaticTranslations();
+  updateLangButtons();
+  renderMenu();
+  setLangInPath(currentLang);
+  saveLang(currentLang);
+  // handle popstate (user manual navigation)
+  window.addEventListener('popstate', () => {
+    const pathLang = getLangFromPath();
+    if(pathLang && pathLang !== currentLang){
+      currentLang = pathLang;
+      applyStaticTranslations();
+      renderMenu(searchInput.value.trim());
+      updateLangButtons();
+    }
+  });
+  // focus search
+  searchInput.focus();
+}
+init();
+
+/* ---------- Keyboard numeric quick open (helpful) ---------- */
+let typedNumber = '';
+document.addEventListener('keydown', (e)=>{
+  if(document.activeElement === document.getElementById('searchInput')) return;
+  if(e.key >= '0' && e.key <= '9'){
+    typedNumber += e.key;
+    showOverlay((t('quickNumber')||'Nömrə')+': ' + typedNumber, 1200);
+    if(typedNumber.length >= 2){ // try to open if two digits
+      const id = Number(typedNumber);
+      if(id >=1 && id <= 80){ openSection(id); typedNumber=''; }
+    }
+    clearTypedNumberDebounce();
+  } else if(e.key === 'Enter' && typedNumber.length){
+    const id = Number(typedNumber);
+    if(id >=1 && id <= 80) openSection(id);
+    typedNumber = '';
+  } else if(e.key === 'Escape'){
+    showMenu(); typedNumber='';
+  }
+});
+let typedTimer = null;
+function clearTypedNumberDebounce(){
+  if(typedTimer) clearTimeout(typedTimer);
+  typedTimer = setTimeout(()=>{ typedNumber=''; typedTimer=null; }, 2000);
+}
+
+/* Ensure some generic localized strings exist */
+Object.keys(translations).forEach(l=>{
+  if(!translations[l]['quickNumber']) translations[l]['quickNumber'] = (l==='tr'?'Numara':'Nömrə');
+  if(!translations[l]['backHome']) translations[l]['backHome'] = (l==='tr'?'Ana Sayfaya Dön':'Ana Səhifəyə Qayıt');
+});
+
+/* Show menu initially */
+showMenu();
+
+</script>
+</body>
+</html>
