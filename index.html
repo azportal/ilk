@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="https://azportal.github.io/ilk/ — Azərbaycanda ən böyük onlayn portal. 80 bölmə, pulsuz xidmətlər, 5 dil." />
+  <meta name="description" content="https://azportal.github.io/ilk/ — Azərbaycanda ən böyük onlayn portal." />
   
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-00KMGJ4TSM"></script>
   <script>
@@ -14,88 +14,88 @@
   </script>
   <meta name="google-site-verification" content="6zwIJK4HBkk3x12b1s263vSQWxxrIAytcKQ-QrjFNjY" />
   <meta name="google-site-verification" content="7KYCp6OVjOrZB_TTBfOI8X-d6JSOlyjRtp3NDhplsCY" />
-  <meta name="google-site-verification" content="xd5sf4oz2nt6" />
-  <meta name="google-site-verification" content="gv-vzw7yr3yrztlrq.dv.googlehosted.com" />
-  
-  <title>https://azportal.github.io/ilk/</title>
   
   <style>
     :root{
-      --bg:#fff5f5; --panel:#ffffff; --accent:#d32f2f; --accent-alt:#1976d2; --touch:#ffe0e0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      --bg:#fff5f5; --panel:#ffffff; --accent:#d32f2f; --accent-alt:#1976d2;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     }
-    body{margin:0; background:var(--bg); color:#0b1822;}
-    header { position:fixed; top:0; left:0; right:0; height:56px; display:flex; align-items:center; padding:8px 12px; background:linear-gradient(135deg, #d32f2f 0%, #1976d2 100%); z-index:1000; color:#fff; }
-    .wrap { max-width:720px; margin:0 auto; padding:72px 12px 100px; }
-    .searchbar { display:flex; gap:6px; margin-bottom:15px; }
-    .searchbar input { flex:1; padding:10px; border-radius:8px; border:2px solid var(--accent); }
-    .list-section { background:#fff; margin-bottom:12px; border-radius:8px; border-top:3px solid var(--accent); padding:10px; }
-    ul.menu { list-style:none; padding:0; }
-    li.menu-item { border-bottom:1px solid #eee; }
-    a.menu-link { display:flex; padding:12px; text-decoration:none; color:inherit; font-weight:500; }
-    .num { width:30px; color:var(--accent); font-weight:bold; }
-    #contentArea { display:none; background:#fff; padding:15px; border-radius:8px; border:3px solid var(--accent); }
-    .btn { padding:12px; border-radius:6px; background:var(--accent); color:#fff; text-align:center; text-decoration:none; display:block; font-weight:bold; margin-top:15px; }
-    .back-btn { display:inline-block; margin-bottom:10px; color:var(--accent-alt); text-decoration:none; font-weight:bold; }
-    footer { position:fixed; bottom:0; width:100%; background:#fff; border-top:1px solid #ddd; padding:10px; text-align:center; font-size:12px; }
+    body{margin:0; background:var(--bg); padding-bottom: 60px;}
+    header { position:fixed; top:0; left:0; right:0; height:56px; display:flex; align-items:center; padding:0 12px; background:linear-gradient(135deg, #d32f2f 0%, #1976d2 100%); z-index:1000; color:#fff; font-weight:900; }
+    .wrap { max-width:720px; margin:0 auto; padding:72px 12px 20px; }
+    .searchbar input { width:100%; padding:12px; border-radius:8px; border:2px solid var(--accent); box-sizing:border-box; margin-bottom:15px; }
+    .list-section { background:#fff; margin-bottom:15px; border-radius:8px; border-top:3px solid var(--accent); padding:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+    .list-section h3 { margin:0 0 10px 0; font-size:14px; color:var(--accent); text-transform:uppercase; }
+    ul.menu { list-style:none; padding:0; margin:0; }
+    li.menu-item { border-bottom:1px solid rgba(211,47,47,0.1); }
+    a.menu-link { display:flex; padding:12px 10px; text-decoration:none; color:#333; font-weight:500; align-items:center; }
+    .num { width:35px; color:var(--accent); font-weight:900; }
+    #contentArea { display:none; background:#fff; padding:20px; border-radius:8px; border:3px solid var(--accent); }
+    .btn { padding:15px; border-radius:8px; background:linear-gradient(135deg, #d32f2f, #1976d2); color:#fff; text-align:center; text-decoration:none; display:block; font-weight:bold; margin-top:20px; }
+    .back-btn { display:inline-block; margin-bottom:15px; color:var(--accent); text-decoration:none; font-weight:bold; }
   </style>
 </head>
 <body>
 
-<header><div style="font-weight:900;">https://azportal.github.io/ilk/</div></header>
+<header>https://azportal.github.io/ilk/</header>
 
 <main class="wrap">
   <div id="mainView">
-    <div class="searchbar">
-      <input id="searchInput" type="search" placeholder="Axtar..." />
-    </div>
+    <div class="searchbar"><input id="searchInput" type="search" placeholder="Axtar..." /></div>
     <div id="menuContainer"></div>
   </div>
-  
   <div id="contentArea"></div>
 </main>
 
 <script>
-const translations = { az: { m1:"📥 Whatsapp Plus", m2:"📥 Instagram Plus", m3:"📥 Youtube Plus", m4:"📥 TikTok Plus", m5:"🔐 ArgoVPN Pro", m10:"ℹ️ İnformasiya" /* Digər 80-ə qədər bura yazıla bilər */ } };
-const categories = { "Əsas Bölmələr": [1,2,3,4,5,10] }; // Nümunə üçün bir neçə ID
+// Köhnə adları bura daxil etdim ki, "Bölmə X" yazısı görünməsin
+const defaultNames = {
+  1:"📥 Whatsapp Plus", 2:"📥 Instagram Plus", 3:"📥 Youtube Plus", 4:"📥 TikTok Plus", 5:"🔐 ArgoVPN Pro",
+  6:"🖼 Şəkil Bərpa", 7:"🎵 Mahnı Axtar", 8:"🔎 Şəkil Axtar", 9:"🔗 Lazımlı Linklər", 10:"ℹ️ İnformasiya"
+};
 
-function t(id) { return translations.az['m'+id] || "Bölmə " + id; }
-function esc(s) { return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+const categories = {
+  "📥 Yükləmələr": [1,2,3,4,5],
+  "🎨 Media & Bərpa": [6,7,8],
+  "ℹ️ Məlumat": [9,10]
+};
 
 function renderMenu(filter = '') {
   const container = document.getElementById('menuContainer');
   container.innerHTML = '';
-  // 80 Bölməni dövr ilə yaradırıq
-  let html = '<div class="list-section"><ul class="menu">';
-  for(let i=1; i<=80; i++) {
-    const title = t(i);
-    if(title.toLowerCase().includes(filter.toLowerCase())) {
-      html += `<li class="menu-item"><a href="#" class="menu-link" onclick="openSection(${i}); return false;"><span class="num">${i}</span>${esc(title)}</a></li>`;
-    }
-  }
-  html += '</ul></div>';
-  container.innerHTML = html;
+  const db = JSON.parse(localStorage.getItem('portal_db') || '{}');
+
+  Object.keys(categories).forEach(cat => {
+    let html = `<div class="list-section"><h3>${cat}</h3><ul class="menu">`;
+    let hasMatch = false;
+
+    categories[cat].forEach(id => {
+      const name = (db[id] && db[id].t) ? db[id].t : (defaultNames[id] || "Bölmə " + id);
+      if(name.toLowerCase().includes(filter.toLowerCase())) {
+        html += `<li class="menu-item"><a href="#" class="menu-link" onclick="openSection(${id}); return false;"><span class="num">${id}</span>${name}</a></li>`;
+        hasMatch = true;
+      }
+    });
+
+    html += '</ul></div>';
+    if(hasMatch) container.innerHTML += html;
+  });
 }
 
 function openSection(id) {
   const db = JSON.parse(localStorage.getItem('portal_db') || '{}');
   const custom = db[id] || {};
+  const name = custom.t || defaultNames[id] || "Bölmə " + id;
   
   document.getElementById('mainView').style.display = 'none';
   const area = document.getElementById('contentArea');
   area.style.display = 'block';
-  
   area.innerHTML = `
-    <a href="#" class="back-btn" onclick="closeSection(); return false;">⬅️ Geri qayıt</a>
-    <h2>${id}. ${esc(custom.t || t(id))}</h2>
-    <div style="white-space:pre-line; margin:15px 0;">${esc(custom.d || "Məlumat yoxdur.")}</div>
-    <a href="${custom.l || '#'}" target="_blank" class="btn">📥 YÜKLƏ / GİRİŞ ET</a>
+    <a href="#" class="back-btn" onclick="location.reload(); return false;">⬅️ Geri</a>
+    <h2 style="color:var(--accent)">${id}. ${name}</h2>
+    <div style="white-space:pre-line; line-height:1.6;">${custom.d || "Admin panelindən bu bölməyə məqalə əlavə edilməyib."}</div>
+    <a href="${custom.l || '#'}" target="_blank" class="btn">GİRİŞ ET / YÜKLƏ</a>
   `;
-}
-
-function closeSection() {
-  document.getElementById('mainView').style.display = 'block';
-  document.getElementById('contentArea').style.display = 'none';
 }
 
 document.getElementById('searchInput').addEventListener('input', e => renderMenu(e.target.value));
