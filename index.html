@@ -1,129 +1,72 @@
-<!doctype html>
-<html lang="az">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="yandex-verification" content="077145342cf7f4c9" />
-  <title>AzPortal | Admin İdarəetməli</title>
-  
-  <style>
-    :root{ --bg:#fff5f5; --panel:#ffffff; --accent:#d32f2f; --accent-alt:#1976d2; font-family: sans-serif; }
-    body{ margin:0; background:var(--bg); }
-    header { position:fixed; top:0; left:0; right:0; height:56px; display:flex; align-items:center; justify-content:space-between; padding:0 12px; background:linear-gradient(135deg, #d32f2f 0%, #1976d2 100%); z-index:1000; color:white; }
-    .wrap { max-width:720px; margin:60px auto; padding:12px; }
-    .list-section { margin:15px 0; background:#fff; padding:10px; border-radius:8px; border-top:3px solid var(--accent); }
-    .menu-item { border-bottom:1px solid #eee; list-style:none; }
-    .menu-link { display:flex; padding:12px; text-decoration:none; color:#333; }
-    .num { width:30px; color:var(--accent); font-weight:bold; }
-    #adminPanel { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:10000; color:white; padding:20px; overflow-y:auto; box-sizing:border-box; }
-    input, textarea, select { width:100%; padding:10px; margin:5px 0 15px; border-radius:5px; border:none; }
-    .btn { background:var(--accent); color:white; border:none; padding:10px; cursor:pointer; border-radius:5px; }
-    #contentArea { display:none; background:white; padding:20px; border-radius:8px; margin-top:10px; }
-  </style>
-</head>
-<body>
-
-<header>
-  <div onclick="adminTrigger()" style="cursor:pointer; font-weight:900;">AzPortal</div>
-  <div>Admin İdarəetmə</div>
-</header>
-
-<main class="wrap">
-  <div id="mainView">
-    <div id="menuContainer"></div>
-  </div>
-  <div id="contentArea"></div>
-</main>
-
-<div id="adminPanel">
-  <h3>🔐 Gelişmiş Admin Panel</h3>
-  <input type="password" id="adminPass" placeholder="Şifrə">
-  <button class="btn" onclick="loginAdmin()">Giriş</button>
-
-  <div id="adminControls" style="display:none; margin-top:20px;">
-    <hr>
-    <h4>1. Yeni Bölmə (ID) Yarat/Dəyiş</h4>
-    <label>ID nömrəsi:</label>
-    <input type="number" id="editId" placeholder="Məsələn: 50">
+<div id="top-header-container" style="background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: white; padding: 15px; font-family: sans-serif; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ffd700;">
     
-    <label>Bölmənin Adı:</label>
-    <input type="text" id="editTitle" placeholder="Məsələn: Whatsapp Plus">
-    
-    <label>Hansı Kateqoriyaya aid olsun?</label>
-    <input type="text" id="editCat" placeholder="Məsələn: Whatsapp Bölümü">
-    
-    <label>Məzmun (Yükləmə linki və ya Reklam):</label>
-    <textarea id="editContent" placeholder="Bura mətn və ya <a href='...'>link</a> yazın"></textarea>
-    
-    <button class="btn" onclick="saveNewSection()">Yadda Saxla</button>
-    <button class="btn" style="background:gray;" onclick="clearData()">Sistemi Sıfırla (Ehtiyatlı ol!)</button>
-  </div>
-  <br>
-  <button onclick="closeAdmin()" style="background:none; border:1px solid white; color:white; padding:10px; width:100%;">Bağla</button>
+    <div>
+        <div id="dynamic-greeting" style="font-weight: bold; font-size: 18px; margin-bottom: 5px;"></div>
+        <div id="dynamic-date-time" style="font-size: 14px; opacity: 0.8;"></div>
+    </div>
+
+    <div>
+        <select id="site-lang-select" onchange="changeSiteLanguage(this.value)" style="padding: 8px; border-radius: 5px; border: none; cursor: pointer; background: white; color: #333; font-weight: bold;">
+            <option value="az">Azərbaycan 🇦🇿</option>
+            <option value="tr">Türkçe 🇹🇷</option>
+            <option value="en">English 🇬🇧</option>
+            <option value="ru">Русский 🇷🇺</option>
+            <option value="ua">Українська 🇺🇦</option>
+            <option value="ge">ქართული 🇬🇪</option>
+        </select>
+    </div>
 </div>
 
+<div id="admin-dynamic-sections" style="margin: 20px 10px;">
+    </div>
+
+<div id="admin-ads-slot" style="margin: 20px 0; text-align: center;">
+    </div>
+
+<footer style="padding: 20px; background: #222; color: #bbb; text-align: center; font-size: 13px;">
+    <div style="margin-bottom: 10px;">
+        <a href="/sitemap.xml" style="color: #ffd700; text-decoration: none; margin: 0 10px;">Sistem Maps</a>
+        <a href="https://maps.google.com" target="_blank" style="color: #ffd700; text-decoration: none; margin: 0 10px;">Google Maps Link</a>
+    </div>
+    <p>© 2026 AzPortal - Bütün hüquqlar qorunur.</p>
+</footer>
+
 <script>
-// Lokal yaddaşdan dataları götürək
-let customData = JSON.parse(localStorage.getItem('azportal_data')) || {
-  categories: { "Yükləmələr": [1,2,3], "Xəbərlər": [21,25] },
-  titles: { 1:"Whatsapp Plus", 2:"Instagram Plus", 3:"Youtube Plus", 21:"Son Xəbərlər", 25:"Hava Proqnozu" },
-  contents: {}
+const translations = {
+    az: { morning: "Sabahınız xeyir", afternoon: "Günortanız xeyir", evening: "Axşamınız xeyir", night: "Gecəniz xeyrə", welcome: "saytımıza xoş gəldiniz!", locale: 'az-AZ' },
+    tr: { morning: "Günaydın", afternoon: "Tünaydın", evening: "İyi akşamlar", night: "İyi geceler", welcome: "sitemize hoş geldiniz!", locale: 'tr-TR' },
+    en: { morning: "Good morning", afternoon: "Good afternoon", evening: "Good evening", night: "Good night", welcome: "welcome to our site!", locale: 'en-US' },
+    ru: { morning: "Доброе утро", afternoon: "Добрый день", evening: "Добрый вечер", night: "Доброй ночи", welcome: "добро пожаловать на наш сайт!", locale: 'ru-RU' },
+    ua: { morning: "Доброго ранку", afternoon: "Доброго дня", evening: "Доброго вечора", night: "На добраніч", welcome: "ласкаво просимо на наш сайт!", locale: 'uk-UA' },
+    ge: { morning: "დილა მშვიდობისა", afternoon: "მშვიდობიანი დღე", evening: "საღამო მშვიდობისა", night: "ღამე მშვიდობისა", welcome: "კეთილი იყოს თქვენი მობრძანება!", locale: 'ka-GE' }
 };
 
-function renderMenu() {
-  const container = document.getElementById('menuContainer');
-  container.innerHTML = '';
-  for(let cat in customData.categories) {
-    let html = `<section class="list-section"><h3>${cat}</h3>`;
-    customData.categories[cat].forEach(id => {
-      html += `<div class="menu-item"><a href="#" class="menu-link" onclick="openSection(${id});return false;"><span class="num">${id}</span><span>${customData.titles[id] || 'Bölmə '+id}</span></a></div>`;
-    });
-    container.innerHTML += html + `</section>`;
-  }
+let currentLang = 'az';
+
+function changeSiteLanguage(lang) {
+    currentLang = lang;
+    updateDisplay();
 }
 
-function openSection(id) {
-  document.getElementById('mainView').style.display = 'none';
-  const area = document.getElementById('contentArea');
-  area.style.display = 'block';
-  const content = customData.contents[id] || "Məlumat hazırlanır...";
-  area.innerHTML = `<button class="btn" onclick="closeSection()">⬅ Qayıt</button><h2>${customData.titles[id]}</h2><div style="margin-top:20px;">${content}</div>`;
+function updateDisplay() {
+    const now = new Date();
+    const hours = now.getHours();
+    const t = translations[currentLang];
+    
+    // Qarşılama tərcüməsi
+    let greet = "";
+    if (hours >= 5 && hours < 12) greet = t.morning;
+    else if (hours >= 12 && hours < 18) greet = t.afternoon;
+    else if (hours >= 18 && hours < 23) greet = t.evening;
+    else greet = t.night;
+    
+    document.getElementById('dynamic-greeting').innerText = `${greet}, ${t.welcome}`;
+    
+    // Saat və Tarix tərcüməsi (Dinamik format)
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    document.getElementById('dynamic-date-time').innerText = now.toLocaleDateString(t.locale, options);
 }
 
-function closeSection() {
-  document.getElementById('contentArea').style.display = 'none';
-  document.getElementById('mainView').style.display = 'block';
-}
-
-// ADMIN FUNKSİYALARI
-let clickCount = 0;
-function adminTrigger() { clickCount++; if(clickCount >= 5) { document.getElementById('adminPanel').style.display = 'block'; clickCount = 0; } }
-function loginAdmin() { if(document.getElementById('adminPass').value === 'azportal2026') document.getElementById('adminControls').style.display = 'block'; }
-
-function saveNewSection() {
-  const id = parseInt(document.getElementById('editId').value);
-  const title = document.getElementById('editTitle').value;
-  const cat = document.getElementById('editCat').value;
-  const content = document.getElementById('editContent').value;
-
-  if(!id || !title || !cat) return alert("Bütün xanaları doldurun!");
-
-  // Kateqoriya yoxdursa yarat, varsa ID-ni ora əlavə et
-  if(!customData.categories[cat]) customData.categories[cat] = [];
-  if(!customData.categories[cat].includes(id)) customData.categories[cat].push(id);
-
-  customData.titles[id] = title;
-  customData.contents[id] = content;
-
-  localStorage.setItem('azportal_data', JSON.stringify(customData));
-  alert("Uğurla əlavə edildi!");
-  renderMenu();
-}
-
-function clearData() { if(confirm("Bütün yaratdıqların silinsin?")) { localStorage.removeItem('azportal_data'); location.reload(); } }
-function closeAdmin() { document.getElementById('adminPanel').style.display = 'none'; }
-
-renderMenu();
+setInterval(updateDisplay, 1000);
+updateDisplay();
 </script>
-</body>
-</html>
