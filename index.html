@@ -5,6 +5,23 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="description" content="https://azportal.github.io/ilk/ — Azərbaycanda ən böyük onlayn portal. 80 bölmə, pulsuz xidmətlər, 5 dil." />
   <meta name="keywords" content="portal, whatsapp, instagram, youtube, tiktok, quran, hava, bürc, xəbərlər, dərman, oyunlar" />
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-00KMGJ4TSM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-00KMGJ4TSM');
+  </script>
+
+  <meta name="google-site-verification" content="6zwIJK4HBkk3x12b1s263vSQWxxrIAytcKQ-QrjFNjY" />
+  <meta name="google-site-verification" content="7KYCp6OVjOrZB_TTBfOI8X-d6JSOlyjRtp3NDhplsCY" />
+  <meta name="google-site-verification" content="xd5sf4oz2nt6" />
+  <meta name="google-site-verification" content="gv-vzw7yr3yrztlrq.dv.googlehosted.com" />
+  
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="sitemap.xml" />
+  
   <title>https://azportal.github.io/ilk/</title>
   <link rel="canonical" href="https://azportal.github.io/ilk/" />
   
@@ -24,7 +41,7 @@
     header {
       position:fixed;top:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;background:linear-gradient(135deg, #d32f2f 0%, #1976d2 100%);border-bottom:3px solid var(--accent);z-index:1000;box-shadow:0 4px 12px rgba(211,47,47,0.3);
     }
-    .wrap { max-width:720px;margin:0 auto;padding:72px 12px 140px;}
+    .wrap { max-width:720px;margin:0 auto;padding:72px 12px 180px;} /* Alt hissə üçün padding artırıldı */
     .brand { font-weight:900;color:#ffffff; font-size:16px; }
     .datetime { font-size:12px; color:#ffffff; text-align:right; min-width:120px; }
     .lang-switch { display:flex; gap:4px; align-items:center; }
@@ -50,6 +67,29 @@
     footer {
       position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg, #d32f2f 0%, #1976d2 100%);border-top:3px solid var(--accent);padding:12px 12px;font-size:11px;color:#ffffff;text-align:center;z-index:1000;font-weight:600;
     }
+    footer a { color: #ffe0e0; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    
+    /* REKLAM KONTEYNERİ ÜÇÜN CSS */
+    .ads-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px; /* Reklamlar arası məsafə */
+      margin-top: 20px;
+      margin-bottom: 20px;
+      flex-wrap: wrap; /* Ekrana sığmasa alt-alta düşsün */
+    }
+    .ad-slot {
+      width: 300px; /* Reklamın genişliyi (özünüzə uyğun dəyişə bilərsiniz) */
+      height: 250px; /* Reklamın hündürlüyü (özünüzə uyğun dəyişə bilərsiniz) */
+      background-color: #f0f0f0; /* Reklam yüklənməyəndə görünəcək rəng */
+      border: 1px dashed #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      font-size: 12px;
+    }
   </style>
 </head>
 <body>
@@ -74,10 +114,20 @@
     </div>
     <div id="menuContainer"></div>
     <div id="contentArea"></div>
-  </main>
+    
+    <div class="ads-container">
+      <div class="ad-slot">
+        Reklam 1
+      </div>
+      <div class="ad-slot">
+        Reklam 2
+      </div>
+    </div>
+    </main>
 
   <footer>
-    <div>Müəllif: <strong>Azmi</strong> | https://azportal.github.io/ilk/ | © 2023-2026</div>
+    <div style="margin-bottom: 4px;">Müəllif: <strong>Azmi</strong> | © 2023-2026</div>
+    <div><a href="sitemap.html">Sayt Xəritəsi (Sitemap)</a></div>
   </footer>
 
 <script>
@@ -150,7 +200,7 @@ const translations = {
     m46:"📅 День", m47:"⚖️ Вага", m48:"📝 Іспит", m49:"✍️ Текст", m50:"❌⭕ X - O",
     m51:"♟ Шашки", m52:"🔮 Магія", m53:"📐 Рівняння", m54:"🧮 Калькулятор", m55:"💰 Зарплата",
     m56:"📡 Сканер", m57:"🌍 Домен", m58:"💳 Webmoney", m59:"🌐 Домени", m60:"📍 IP",
-    m61:"💻 Кодування", m62:"⚙️ Grab", m63:"🔣 Символи", m64:"🔤 Букви", m65:"🎨 Кольори",
+    m61:"💻 Кодування", m62:"⚙️ Grab", m63:"🔣 Символы", m64:"🔤 Букви", m65:"🎨 Кольори",
     m66:"🙂 Смайл", m67:"🔘 Кнопка", m68:"🤔 Факти", m69:"💄 Мода", m70:"🏥 Здоров'я",
     m71:"👨‍👩‍👧 Сім'я", m72:"🍲 Кухня", m73:"📖 Підручники", m74:"📘 Професія", m75:"📝 Твори",
     m76:"📜 Прислів'я", m77:"💬 Афоризми", m78:"❓ Загадки", m79:"😂 Жарти", m80:"🧚 Казки"
