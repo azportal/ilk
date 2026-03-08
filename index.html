@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="description" content="https://azportal.github.io/ilk/ — Azərbaycanda ən böyük onlayn portal. 80 bölmə, pulsuz xidmətlər, 5 dil." />
-  <meta name="keywords" content="portal, whatsapp, instagram, youtube, tiktok, quran, hava, bürc, xəbərlər, dərman, oyunlar" />
   
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-00KMGJ4TSM"></script>
   <script>
@@ -13,42 +12,94 @@
     gtag('js', new Date());
     gtag('config', 'G-00KMGJ4TSM');
   </script>
-
   <meta name="google-site-verification" content="6zwIJK4HBkk3x12b1s263vSQWxxrIAytcKQ-QrjFNjY" />
   <meta name="google-site-verification" content="7KYCp6OVjOrZB_TTBfOI8X-d6JSOlyjRtp3NDhplsCY" />
   <meta name="google-site-verification" content="xd5sf4oz2nt6" />
   <meta name="google-site-verification" content="gv-vzw7yr3yrztlrq.dv.googlehosted.com" />
   
-  <link rel="sitemap" type="application/xml" title="Sitemap" href="sitemap.xml" />
-  
   <title>https://azportal.github.io/ilk/</title>
   
   <style>
     :root{
-      --bg:#fff5f5;
-      --panel:#ffffff;
-      --accent:#d32f2f;
-      --accent-alt:#1976d2;
-      --touch:#ffe0e0;
+      --bg:#fff5f5; --panel:#ffffff; --accent:#d32f2f; --accent-alt:#1976d2; --touch:#ffe0e0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      color:#0b1822;
     }
-    html,body{height:100%;margin:0;background:var(--bg);-webkit-text-size-adjust:100%;}
-    header {
-      position:fixed;top:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:linear-gradient(135deg, #d32f2f 0%, #1976d2 100%);z-index:1000;box-shadow:0 4px 12px rgba(211,47,47,0.3);
+    body{margin:0; background:var(--bg); color:#0b1822;}
+    header { position:fixed; top:0; left:0; right:0; height:56px; display:flex; align-items:center; padding:8px 12px; background:linear-gradient(135deg, #d32f2f 0%, #1976d2 100%); z-index:1000; color:#fff; }
+    .wrap { max-width:720px; margin:0 auto; padding:72px 12px 100px; }
+    .searchbar { display:flex; gap:6px; margin-bottom:15px; }
+    .searchbar input { flex:1; padding:10px; border-radius:8px; border:2px solid var(--accent); }
+    .list-section { background:#fff; margin-bottom:12px; border-radius:8px; border-top:3px solid var(--accent); padding:10px; }
+    ul.menu { list-style:none; padding:0; }
+    li.menu-item { border-bottom:1px solid #eee; }
+    a.menu-link { display:flex; padding:12px; text-decoration:none; color:inherit; font-weight:500; }
+    .num { width:30px; color:var(--accent); font-weight:bold; }
+    #contentArea { display:none; background:#fff; padding:15px; border-radius:8px; border:3px solid var(--accent); }
+    .btn { padding:12px; border-radius:6px; background:var(--accent); color:#fff; text-align:center; text-decoration:none; display:block; font-weight:bold; margin-top:15px; }
+    .back-btn { display:inline-block; margin-bottom:10px; color:var(--accent-alt); text-decoration:none; font-weight:bold; }
+    footer { position:fixed; bottom:0; width:100%; background:#fff; border-top:1px solid #ddd; padding:10px; text-align:center; font-size:12px; }
+  </style>
+</head>
+<body>
+
+<header><div style="font-weight:900;">https://azportal.github.io/ilk/</div></header>
+
+<main class="wrap">
+  <div id="mainView">
+    <div class="searchbar">
+      <input id="searchInput" type="search" placeholder="Axtar..." />
+    </div>
+    <div id="menuContainer"></div>
+  </div>
+  
+  <div id="contentArea"></div>
+</main>
+
+<script>
+const translations = { az: { m1:"📥 Whatsapp Plus", m2:"📥 Instagram Plus", m3:"📥 Youtube Plus", m4:"📥 TikTok Plus", m5:"🔐 ArgoVPN Pro", m10:"ℹ️ İnformasiya" /* Digər 80-ə qədər bura yazıla bilər */ } };
+const categories = { "Əsas Bölmələr": [1,2,3,4,5,10] }; // Nümunə üçün bir neçə ID
+
+function t(id) { return translations.az['m'+id] || "Bölmə " + id; }
+function esc(s) { return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+function renderMenu(filter = '') {
+  const container = document.getElementById('menuContainer');
+  container.innerHTML = '';
+  // 80 Bölməni dövr ilə yaradırıq
+  let html = '<div class="list-section"><ul class="menu">';
+  for(let i=1; i<=80; i++) {
+    const title = t(i);
+    if(title.toLowerCase().includes(filter.toLowerCase())) {
+      html += `<li class="menu-item"><a href="#" class="menu-link" onclick="openSection(${i}); return false;"><span class="num">${i}</span>${esc(title)}</a></li>`;
     }
-    .wrap { max-width:720px;margin:0 auto;padding:72px 12px 180px;}
-    .brand { font-weight:900;color:#ffffff; font-size:16px; }
-    .datetime { font-size:12px; color:#ffffff; }
-    .searchbar { margin:6px 0 12px; display:flex; gap:6px; }
-    .searchbar input{ flex:1;padding:10px 12px;border-radius:8px;border:2px solid var(--accent);background:var(--panel);}
-    .btn { padding:10px 12px;border-radius:6px;background:var(--accent);color:#ffffff;font-weight:600;text-decoration:none;display:inline-block;cursor:pointer;border:none;}
-    .list-section { margin:12px 0; border-top:3px solid var(--accent); padding:12px; background:white; border-radius:8px; }
-    .list-section h3 { margin:0 0 10px 0; font-size:13px; color:var(--accent); text-transform:uppercase; }
-    ul.menu { list-style:none;padding:0;margin:0; }
-    li.menu-item { border-bottom:1px solid #eee; background:var(--panel); margin-bottom:6px; border-radius:6px; }
-    a.menu-link { display:flex; align-items:center; gap:10px; padding:12px 10px; color:inherit; text-decoration:none; font-size:14px; }
-    .num { width:30px; color:var(--accent); font-weight:900; }
-    #contentArea { display:none; padding:15px; background:white; border-radius:8px; border:2px solid var(--accent); }
-    .back-btn { background:linear-gradient(135deg, #d32f2f, #1976d2); color:white; padding:8px 15px; border-radius:5px; text-decoration:none; display:inline-block; margin-bottom:15px; font-weight:bold;}
-    footer { position:fixed;bottom:0;left:0;
+  }
+  html += '</ul></div>';
+  container.innerHTML = html;
+}
+
+function openSection(id) {
+  const db = JSON.parse(localStorage.getItem('portal_db') || '{}');
+  const custom = db[id] || {};
+  
+  document.getElementById('mainView').style.display = 'none';
+  const area = document.getElementById('contentArea');
+  area.style.display = 'block';
+  
+  area.innerHTML = `
+    <a href="#" class="back-btn" onclick="closeSection(); return false;">⬅️ Geri qayıt</a>
+    <h2>${id}. ${esc(custom.t || t(id))}</h2>
+    <div style="white-space:pre-line; margin:15px 0;">${esc(custom.d || "Məlumat yoxdur.")}</div>
+    <a href="${custom.l || '#'}" target="_blank" class="btn">📥 YÜKLƏ / GİRİŞ ET</a>
+  `;
+}
+
+function closeSection() {
+  document.getElementById('mainView').style.display = 'block';
+  document.getElementById('contentArea').style.display = 'none';
+}
+
+document.getElementById('searchInput').addEventListener('input', e => renderMenu(e.target.value));
+renderMenu();
+</script>
+</body>
+</html>
