@@ -1,176 +1,157 @@
-
 <!doctype html>
 <html lang="az">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="Azərbaycanda ən böyük onlayn portal. 80 bölmə, pulsuz xidmətlər, 5 dil." />
-  <meta name="keywords" content="portal, whatsapp, instagram, youtube, tiktok, quran, hava, bürc, xəbərlər, dərman, oyunlar" />
+  <meta name="description" content="AzPortal — Azərbaycanda ən böyük onlayn portal. 80 bölmə, 5 dil." />
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-00KMGJ4TSM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-00KMGJ4TSM');
+  </script>
+
+  <meta name="google-site-verification" content="6zwIJK4HBkk3x12b1s263vSQWxxrIAytcKQ-QrjFNjY" />
+  <meta name="google-site-verification" content="7KYCp6OVjOrZB_TTBfOI8X-d6JSOlyjRtp3NDhplsCY" />
+  <meta name="google-site-verification" content="xd5sf4oz2nt6" />
+  <meta name="google-site-verification" content="gv-vzw7yr3yrztlrq.dv.googlehosted.com" />
+  
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="sitemap.xml" />
+  <link rel="canonical" href="https://azportal.github.io/ilk/" />
+  
   <title>AzPortal | İlk Azərbaycan Portalı</title>
   
   <style>
     :root{
-      --bg:#fff5f5;
-      --panel:#ffffff;
-      --muted:#666;
-      --accent:#d32f2f;
-      --accent-alt:#1976d2;
-      --border:#ffcccc;
-      --touch:#ffe0e0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      color:#0b1822;
+      --bg:#fff5f5; --panel:#ffffff; --accent:#d32f2f; --accent-alt:#1976d2;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     html,body{height:100%;margin:0;background:var(--bg);-webkit-text-size-adjust:100%;}
     header {
-      position:fixed;top:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;background:linear-gradient(135deg, #d32f2f 0%, #1976d2 100%);border-bottom:3px solid var(--accent);z-index:1000;box-shadow:0 4px 12px rgba(211,47,47,0.3);
+      position:fixed;top:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:linear-gradient(135deg, #d32f2f 0%, #1976d2 100%);border-bottom:3px solid var(--accent);z-index:1000;box-shadow:0 4px 12px rgba(211,47,47,0.3);
     }
-    .wrap { max-width:720px;margin:0 auto;padding:72px 12px 180px;}
-    .brand { font-weight:900;color:#ffffff; font-size:14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .datetime { font-size:12px; color:#ffffff; text-align:right; min-width:60px; }
-    .lang-switch { display:flex; gap:4px; align-items:center; }
-    .lang-btn { padding:5px 8px; border-radius:5px; border:1px solid #ffffff; background:transparent; font-size:10px; cursor:pointer; color:#ffffff; font-weight:600; }
+    .wrap { max-width:720px;margin:0 auto;padding:72px 12px 140px;}
+    .brand { font-weight:900;color:#ffffff; font-size:16px; cursor: pointer; }
+    .lang-switch { display:flex; gap:4px; }
+    .lang-btn { padding:5px 8px; border-radius:5px; border:1px solid #ffffff; background:transparent; font-size:11px; cursor:pointer; color:#ffffff; font-weight:600; }
     .lang-btn.active { background:#ffffff; color:#d32f2f; }
     .searchbar { margin:6px 0 12px; display:flex; gap:6px; }
-    .searchbar input{ flex:1;padding:10px 12px;border-radius:8px;border:2px solid var(--accent);font-size:14px;background:var(--panel);color:#d32f2f;}
-    .btn { padding:8px 12px;border-radius:6px;border:2px solid var(--accent);background:var(--accent);font-size:13px;color:#ffffff;cursor:pointer;font-weight:600; }
-    .list-section { margin:12px 0; border-top:3px solid var(--accent); padding:12px; background:linear-gradient(90deg, rgba(211,47,47,0.05) 0%, rgba(25,118,210,0.05) 100%); border-radius:8px; }
-    .list-section h3 { margin:0 0 10px 0; font-size:13px; font-weight:900; color:var(--accent); text-transform:uppercase; }
-    ul.menu { list-style:none;padding:0;margin:0; }
-    li.menu-item { border-bottom:1px solid rgba(211,47,47,0.2); background:var(--panel); margin-bottom:6px; border-radius:6px; }
-    a.menu-link { display:flex; align-items:center; gap:10px; padding:12px 10px; color:inherit; text-decoration:none; font-size:14px; font-weight:500; }
-    a.menu-link:hover { background:var(--touch); }
-    .num { width:25px; color:#d32f2f; flex-shrink:0; font-weight:900; }
-    #contentArea { display:none; padding:15px; background:var(--panel); border:3px solid var(--accent); border-radius:8px; }
-    .back-btn { padding:10px 14px; border-radius:6px; background:linear-gradient(135deg, #d32f2f 0%, #1976d2 100%); font-size:13px; color:#ffffff; text-decoration:none; display:inline-block; margin-bottom:15px; }
-    .ads-container { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
-    .ad-slot { width: 300px; height: 100px; background: #eee; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; color: #999; font-size: 12px; }
-    footer { position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg, #d32f2f 0%, #1976d2 100%); padding:12px; font-size:11px; color:#ffffff; text-align:center; z-index:1000; }
-    footer a { color: #ffe0e0; text-decoration: none; }
+    .searchbar input{ flex:1;padding:10px 12px;border-radius:8px;border:2px solid var(--accent);font-size:14px;}
+    .btn { padding:8px 12px;border-radius:6px;background:var(--accent);color:#ffffff;font-weight:600;border:none;cursor:pointer;}
+    .list-section { margin:12px 0; border-top:3px solid var(--accent); padding:12px; background:#fff; border-radius:8px; }
+    .list-section h3 { margin:0 0 10px 0; font-size:13px; color:var(--accent); text-transform:uppercase; }
+    .menu { list-style:none;padding:0;margin:0; }
+    .menu-item { border-bottom:1px solid #eee; background:#fff; margin-bottom:6px; border-radius:6px; }
+    .menu-link { display:flex; align-items:center; gap:10px; padding:12px 10px; color:inherit; text-decoration:none; font-size:14px; }
+    .num { width:32px; color:#d32f2f; font-weight:900; }
+    #contentArea { display:none; padding:12px; background:#fff; border:3px solid var(--accent); border-radius:8px; }
+    .back-btn { padding:10px 14px; background:var(--accent); color:#fff; text-decoration:none; border-radius:6px; display:inline-block; margin-bottom:12px; }
+    footer { position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg, #d32f2f 0%, #1976d2 100%);padding:12px;font-size:11px;color:#ffffff;text-align:center;z-index:1000;}
+    #adminPanel { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:10000; color:white; padding:20px; box-sizing:border-box; }
   </style>
 </head>
 <body>
 
   <header>
-    <div style="display:flex;align-items:center;gap:8px;flex:1">
-      <div class="brand">AzPortal</div>
-      <nav class="lang-switch">
-        <button class="lang-btn" data-lang="az">AZ</button>
-        <button class="lang-btn" data-lang="tr">TR</button>
-        <button class="lang-btn" data-lang="ru">RU</button>
-        <button class="lang-btn" data-lang="en">EN</button>
-      </nav>
-    </div>
-    <div class="datetime" id="liveDate">00:00</div>
+    <div class="brand" onclick="adminTrigger()">AzPortal</div>
+    <nav class="lang-switch">
+      <button class="lang-btn active" onclick="changeLang('az')">AZ</button>
+      <button class="lang-btn" onclick="changeLang('tr')">TR</button>
+      <button class="lang-btn" onclick="changeLang('ru')">RU</button>
+      <button class="lang-btn" onclick="changeLang('ua')">UA</button>
+      <button class="lang-btn" onclick="changeLang('en')">EN</button>
+    </nav>
   </header>
 
   <main class="wrap">
     <div id="mainView">
       <div class="searchbar">
-        <input id="searchInput" type="search" placeholder="Bölmə axtar..." />
-        <button id="clearSearch" class="btn">X</button>
+        <input id="searchInput" type="search" placeholder="Axtar..." oninput="doSearch()">
       </div>
       <div id="menuContainer"></div>
     </div>
-
     <div id="contentArea"></div>
-
-    <div class="ads-container">
-      <div class="ad-slot">REKLAM SAHƏSİ 1</div>
-      <div class="ad-slot">REKLAM SAHƏSİ 2</div>
-    </div>
   </main>
 
+  <div id="adminPanel">
+    <h3>🔐 Admin Panel</h3>
+    <input type="password" id="adminPass" placeholder="Şifrə" style="width:100%; padding:10px; margin-bottom:10px;">
+    <button class="btn" onclick="loginAdmin()">Giriş</button>
+    <div id="adminControls" style="display:none; margin-top:20px;">
+       <input type="number" id="editId" placeholder="ID">
+       <textarea id="editContent" style="width:100%; height:150px; margin-top:10px;"></textarea>
+       <button class="btn" onclick="saveData()">Yadda Saxla</button>
+    </div>
+    <button onclick="closeAdmin()" style="margin-top:20px; color:white; background:none; border:1px solid #fff;">Bağla</button>
+  </div>
+
   <footer>
-    <div>Müəllif: <strong>Azmi</strong> | © 2023-2026</div>
-    <div><a href="sitemap.xml">Sitemap</a></div>
+    Müəllif: <strong>Azmi</strong> | © 2026 | <a href="sitemap.xml" style="color:#fff">XML</a>
   </footer>
 
-  <script>
-    const translations = {
-      az: { m1:"📥 Whatsapp Plus Yüklə", m2:"📥 Instagram Plus Yüklə", m3:"📥 Youtube Plus Yüklə", m21:"📰 Son Xəbərlər", m25:"🌦 Hava Proqnozu", m26:"♈ Bürclər", m30:"💱 Valyuta" /* ... digərləri */ },
-      tr: { m1:"📥 Whatsapp Plus İndir", m2:"📥 Instagram Plus İndir", m3:"📥 Youtube Plus İndir", m21:"📰 Son Haberler", m25:"🌦 Hava Durumu", m26:"♈ Burçlar", m30:"💱 Döviz" },
-      // Digər dilləri bura əlavə edə bilərsən
-    };
+<script>
+const translations = {
+  az: { m1:"📥 Whatsapp Plus Yüklə", m2:"📥 Instagram Plus Yüklə", m3:"📥 Youtube Plus Yüklə", m21:"📰 Son Xəbərlər", m25:"🌦 Hava Proqnozu", m26:"♈ Bürclər", m30:"💱 Valyuta" },
+  tr: { m1:"📥 Whatsapp Plus İndir", m2:"📥 Instagram Plus İndir", m3:"📥 Youtube Plus İndir", m21:"📰 Son Haberler", m25:"🌦 Hava Durumu", m26:"♈ Burçlar", m30:"💱 Döviz" },
+  ru: { m1:"📥 Скачать Whatsapp Plus", m2:"📥 Скачать Instagram Plus", m3:"📥 Скачать Youtube Plus", m21:"📰 Новости", m25:"🌦 Погода", m26:"♈ Гороскоп", m30:"💱 Валюта" },
+  ua: { m1:"📥 Завантажити Whatsapp Plus", m2:"📥 Завантажити Instagram Plus", m3:"📥 Завантажити Youtube Plus", m21:"📰 Новини", m25:"🌦 Погода", m26:"♈ Гороскоп", m30:"💱 Валюта" },
+  en: { m1:"📥 Download Whatsapp Plus", m2:"📥 Download Instagram Plus", m3:"📥 Download Youtube Plus", m21:"📰 Latest News", m25:"🌦 Weather Forecast", m26:"♈ Horoscope", m30:"💱 Currency" }
+};
 
-    const categories = {
-      "📥 Yükləmələr": [1, 2, 3],
-      "📰 Xəbərlər & Gündəm": [21, 25, 26, 30]
-    };
+const categories = {
+  "Yükləmələr": [1,2,3],
+  "Xəbərlər & Məlumat": [21,25,26,30]
+};
 
-    let currentLang = 'az';
+let currentLang = 'az';
 
-    function renderMenu(filter = '') {
-      const container = document.getElementById('menuContainer');
-      container.innerHTML = '';
-      Object.keys(categories).forEach(cat => {
-        const ids = categories[cat].filter(id => {
-          const text = (translations[currentLang]['m'+id] || '').toLowerCase();
-          return text.includes(filter.toLowerCase());
-        });
-        if (ids.length === 0) return;
-        
-        let html = `<section class="list-section"><h3>${cat}</h3><ul class="menu">`;
-        ids.forEach(id => {
-          html += `<li class="menu-item"><a href="#" class="menu-link" onclick="openSection(${id})">
-                   <span class="num">${id}</span><span>${translations[currentLang]['m'+id]}</span></a></li>`;
-        });
-        html += `</ul></section>`;
-        container.innerHTML += html;
-      });
-    }
+function changeLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.innerText.toLowerCase() === lang);
+  });
+  renderMenu();
+}
 
-    window.openSection = (id) => {
-      document.getElementById('mainView').style.display = 'none';
-      const area = document.getElementById('contentArea');
-      area.style.display = 'block';
-      area.innerHTML = `<a href="#" class="back-btn" onclick="closeSection()">⬅ Qayıt</a>
-                        <h2>${translations[currentLang]['m'+id]}</h2>
-                        <div style="background:#f9f9f9; padding:15px; border-radius:8px;">
-                        Bu bölmə hazırda aktivləşdirilir...</div>`;
-    };
-
-    window.closeSection = () => {
-      document.getElementById('mainView').style.display = 'block';
-      document.getElementById('contentArea').style.display = 'none';
-    };
-
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.onclick = () => {
-        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentLang = btn.dataset.lang;
-        renderMenu();
-      };
+function renderMenu(filter = '') {
+  const container = document.getElementById('menuContainer');
+  container.innerHTML = '';
+  for(let cat in categories) {
+    const ids = categories[cat].filter(id => (translations[currentLang]['m'+id]||'').toLowerCase().includes(filter.toLowerCase()));
+    if(ids.length === 0) continue;
+    let html = `<section class="list-section"><h3>${cat}</h3><ul class="menu">`;
+    ids.forEach(id => {
+      html += `<li class="menu-item"><a href="#" class="menu-link" onclick="openSection(${id});return false;"><span class="num">${id}</span><span>${translations[currentLang]['m'+id]}</span></a></li>`;
     });
+    container.innerHTML += html + `</ul></section>`;
+  }
+}
 
-    document.getElementById('searchInput').oninput = (e) => renderMenu(e.target.value);
-    document.getElementById('clearSearch').onclick = () => { document.getElementById('searchInput').value = ''; renderMenu(); };
+function openSection(id) {
+  document.getElementById('mainView').style.display = 'none';
+  const area = document.getElementById('contentArea');
+  area.style.display = 'block';
+  const saved = localStorage.getItem('data_' + id);
+  area.innerHTML = `<a class="back-btn" href="#" onclick="closeSection();return false;">⬅ Qayıt</a><h2>${translations[currentLang]['m'+id]}</h2><div class="card">${saved ? saved : 'Məlumat hazırlanır...'}</div>`;
+}
 
-    setInterval(() => {
-      const d = new Date();
-      document.getElementById('liveDate').innerText = d.getHours().toString().padStart(2,'0') + ":" + d.getMinutes().toString().padStart(2,'0');
-    }, 1000);
+function closeSection() {
+  document.getElementById('contentArea').style.display = 'none';
+  document.getElementById('mainView').style.display = 'block';
+}
 
-    renderMenu();
-    document.querySelector('[data-lang="az"]').classList.add('active');
-  </script>
+function doSearch() { renderMenu(document.getElementById('searchInput').value); }
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+// ADMIN PANEL
+let cnt = 0;
+function adminTrigger() { cnt++; if(cnt >= 5) { document.getElementById('adminPanel').style.display = 'block'; cnt = 0; } }
+function loginAdmin() { if(document.getElementById('adminPass').value === 'azportal2026') document.getElementById('adminControls').style.display = 'block'; }
+function saveData() { localStorage.setItem('data_' + document.getElementById('editId').value, document.getElementById('editContent').value); alert('Yadda saxlanıldı!'); }
+function closeAdmin() { document.getElementById('adminPanel').style.display = 'none'; }
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDyjq7G64xJW_dPfy_cZ-kfLehKRpewagA",
-      authDomain: "azportal.firebaseapp.com",
-      projectId: "azportal",
-      storageBucket: "azportal.firebasestorage.app",
-      messagingSenderId: "443229690062",
-      appId: "1:443229690062:web:2860cfbb08d076bce7189f",
-      measurementId: "G-5E07WQTLLC"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-  </script>
+renderMenu();
+</script>
 </body>
 </html>
