@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <title>AzPortal Admin | 033@Tural</title>
+    <style>
+        body { font-family: sans-serif; background: #f0f2f5; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .box { width: 100%; max-width: 450px; background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .admin-content { display: none; }
+        h2 { color: #d32f2f; text-align: center; }
+        label { display: block; margin-top: 15px; font-weight: bold; }
+        input, textarea, select { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: #28a745; color: white; border: none; border-radius: 8px; margin-top: 20px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div id="loginPanel" class="box">
+    <h2>Admin Girişi</h2>
+    <input type="password" id="passInput" placeholder="Şifrəni yazın...">
+    <button onclick="checkPass()">Daxil Ol</button>
+</div>
+
+<div id="adminPanel" class="box admin-content">
+    <h2>🚀 İdarəetmə Paneli</h2>
+    <label>Bölməni Seçin:</label>
+    <select id="secID" onchange="loadData()"></select>
+    <label>Bölmə Adı:</label>
+    <input type="text" id="title">
+    <label>Link (Reklamlı):</label>
+    <input type="text" id="link">
+    <label>Məqalə:</label>
+    <textarea id="desc" rows="5"></textarea>
+    <button onclick="save()">Yadda Saxla ✅</button>
+    <button onclick="location.reload()" style="background:#666;">Çıxış</button>
+</div>
+
+<script>
+    const MY_PASS = "033@Tural";
+    function checkPass() {
+        if(document.getElementById('passInput').value === MY_PASS) {
+            document.getElementById('loginPanel').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            loadData();
+        } else { alert("Yanlış şifrə!"); }
+    }
+
+    const select = document.getElementById('secID');
+    for(let i=1; i<=80; i++) {
+        let opt = document.createElement('option');
+        opt.value = i; opt.innerHTML = i + ". Bölmə";
+        select.appendChild(opt);
+    }
+
+    function loadData() {
+        const id = select.value;
+        const data = JSON.parse(localStorage.getItem('portal_db') || '{}');
+        const item = data[id] || {};
+        document.getElementById('title').value = item.t || "";
+        document.getElementById('link').value = item.l || "";
+        document.getElementById('desc').value = item.d || "";
+    }
+
+    function save() {
+        const id = select.value;
+        const data = JSON.parse(localStorage.getItem('portal_db') || '{}');
+        data[id] = { t: document.getElementById('title').value, l: document.getElementById('link').value, d: document.getElementById('desc').value };
+        localStorage.setItem('portal_db', JSON.stringify(data));
+        alert("Yadda saxlanıldı!");
+    }
+</script>
+</body>
+</html>
+
